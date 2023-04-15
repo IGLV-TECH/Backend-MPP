@@ -27,7 +27,7 @@ CREATE TABLE Clients(
 	last_name VARCHAR(50) NOT NULL,
 	first_name VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
-	phone CHAR(10),
+	phone CHAR(10) NOT NULL,
 	passwordC VARCHAR(50) NOT NULL,
 	balance FLOAT NOT NULL,
 	id_address INT CONSTRAINT FK_Clients_Addresses FOREIGN KEY REFERENCES Addresses(ID) NOT NULL
@@ -39,7 +39,7 @@ CREATE TABLE Admins(
 	last_name VARCHAR(50) NOT NULL,
 	first_name VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
-	phone CHAR(10),
+	phone CHAR(10) NOT NULL,
 	passwordA VARCHAR(50) NOT NULL,
 	id_address INT CONSTRAINT FK_Admins_Addresses FOREIGN KEY REFERENCES Addresses(ID) NOT NULL
 );
@@ -50,7 +50,7 @@ CREATE TABLE Employees(
 	last_name VARCHAR(50) NOT NULL,
 	first_name VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
-	phone CHAR(10),
+	phone CHAR(10) NOT NULL,
 	passwordE VARCHAR(50) NOT NULL,
 	id_address INT CONSTRAINT FK_Employees_Addresses FOREIGN KEY REFERENCES Addresses(ID) NOT NULL
 );

@@ -25,3 +25,5 @@ hs_err_pid*
 /Backend-MPP.iml
 /phoneApplication/.idea/
 /build/
+.gradle/
+gradle/

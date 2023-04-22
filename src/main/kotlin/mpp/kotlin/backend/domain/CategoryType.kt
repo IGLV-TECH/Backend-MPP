@@ -1,0 +1,5 @@
+package domain
+
+enum class CategoryType {
+    PAPER_AND_CARDBOARD, PLASTIC_AND_BOTTLE, METAL_AND_ALUMINIUM, ELECTRIC_AND_ELECTRONICS
+}

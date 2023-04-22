@@ -6,4 +6,4 @@
 ## Chestii de retinut:
 
 - O sa dureze mult prima data, dar apoi ar trebui sa fie ok.
-- Nu ar mai trebui modificat continutul `src/main/resources/application.properties`. Pentru schimbare portului mergi in `docker-compose.yml` si schimbi `services.server.ports` din `8080:8080` in `8080:<portul dorit>`.
+- Nu ar mai trebui modificat continutul `src/main/resources/application.properties`. Pentru schimbare portului mergi in `docker-compose.yml` si schimbi `services.server.ports` din `8080:8080` in `<portul dorit>:8080`.

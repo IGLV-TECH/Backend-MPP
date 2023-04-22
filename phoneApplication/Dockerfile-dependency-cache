@@ -1,0 +1,9 @@
+FROM openjdk:17-jdk-buster as builder
+
+WORKDIR /app
+COPY . .
+RUN chmod +x ./gradlew && ./gradlew build
+RUN ./gradlew build
+
+FROM openjdk:17-jdk-buster
+COPY --from=builder /root/.gradle /root/.gradle

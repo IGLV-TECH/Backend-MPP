@@ -1,0 +1,6 @@
+# build/
+# .gradle/
+# bin/
+
+# remove in the future
+**/generateQR/

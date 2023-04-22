@@ -1,0 +1,18 @@
+# Stage 1: Cache Dependencies
+FROM gradle:8.1-jdk17-alpine AS cache
+WORKDIR /app
+COPY build.gradle.kts gradle.properties settings.gradle.kts ./
+RUN gradle dependencies --no-daemon
+
+# Stage 2: Build Stage
+FROM gradle:8.1-jdk17-alpine AS build
+WORKDIR /app
+COPY . .
+COPY --from=cache /root/.gradle /root/.gradle
+RUN gradle clean build --no-daemon
+
+# Stage 3: Production Stage
+FROM gradle:8.1-jdk17-alpine
+WORKDIR /app
+COPY --from=build /app/build/libs/phoneApplication-1.0-SNAPSHOT-plain.jar ./app.jar
+CMD ["java", "-jar", "app.jar"]

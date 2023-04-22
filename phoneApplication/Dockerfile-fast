@@ -1,0 +1,30 @@
+FROM openjdk:17-jdk-buster as cache
+RUN mkdir -p /home/gradle/cache_home
+ENV GRADLE_USER_HOME /home/gradle/cache_home
+WORKDIR /home/gradle/kotlin-code
+
+COPY gradle/ ./gradle/
+COPY build.gradle.kts ./
+# COPY gradle.properties ./
+COPY gradlew ./
+COPY settings.gradle.kts ./
+
+RUN chmod +x ./gradlew && ./gradlew build --no-daemon && \
+    rm -rf /home/gradle/cache_home/*/fileHashes /home/gradle/cache_home/*/plugin-resolution
+
+
+FROM openjdk:17-jdk-buster as builder
+COPY --from=cache /home/gradle/cache_home /home/gradle/.gradle
+COPY . /usr/src/kotlin-code
+WORKDIR /usr/src/kotlin-code
+RUN chmod +x ./gradlew && ./gradlew build --no-daemon && \
+    rm -rf /home/gradle/cache_home/*/fileHashes /home/gradle/cache_home/*/plugin-resolution
+RUN ./gradlew bootJar -i --stacktrace
+
+
+FROM openjdk:17-jdk-buster as final
+EXPOSE 3000
+USER root
+WORKDIR /usr/src/kotlin-code
+COPY --from=builder /usr/src/kotlin-code/build/libs/phoneApplication-1.0-SNAPSHOT.jar ./app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

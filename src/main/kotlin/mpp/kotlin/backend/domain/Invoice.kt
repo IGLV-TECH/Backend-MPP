@@ -20,19 +20,20 @@ class Invoice(
     @OneToOne(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
     @JoinColumn(name = "id_employee", referencedColumnName = "ID")
     private var employee: Employee,
-    @ManyToMany(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
-    @JoinTable(name = "Contents",
-        joinColumns = [JoinColumn(name = "id_invoice", referencedColumnName = "ID")],
-        inverseJoinColumns = [JoinColumn(name = "id_item", referencedColumnName = "ID")])
-    private var items: MutableList<Item> = mutableListOf()
+    @OneToMany(mappedBy = "invoice", cascade = [CascadeType.ALL])
+    @AssociationOverrides(
+        AssociationOverride(name = "id.invoice", joinColumns = [JoinColumn(name = "id")]),
+        AssociationOverride(name = "id.id_invoice", joinColumns = [JoinColumn(name = "id_invoice")])
+    )
+    var items: MutableList<Content> = mutableListOf()
 ) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Int? = null
+    private val id: Int? = null
 
-    fun getId(): Int? {
-        return this.id
+    fun getId(): Int {
+        return this.id!!
     }
 
     fun getCategory(): CategoryType {
@@ -57,9 +58,5 @@ class Invoice(
 
     fun getEmployee(): Employee {
         return this.employee
-    }
-
-    fun getItems(): MutableList<Item> {
-        return this.items
     }
 }

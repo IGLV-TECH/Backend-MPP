@@ -6,28 +6,26 @@ import jakarta.persistence.*
 @Table(name = "Items")
 class Item(
     @Column(name = "element")
-    private var element: ElementType,
+    private var element: String,
     @Column(name = "price")
     private var price: Float,
     @Column(name = "category")
-    private var category: CategoryType,
-    @ManyToMany(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER, mappedBy = "items")
-    private var invoices: MutableList<Invoice> = mutableListOf()
+    private var category: CategoryType
 ) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Int? = null
+    private val id: Int? = null
 
-    fun getId(): Int? {
-        return this.id
+    fun getId(): Int {
+        return this.id!!
     }
 
     fun getCategory(): CategoryType {
         return this.category
     }
 
-    fun getElement(): ElementType {
+    fun getElement(): String {
         return this.element
     }
 

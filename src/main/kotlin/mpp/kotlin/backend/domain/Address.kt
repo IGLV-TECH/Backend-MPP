@@ -14,10 +14,10 @@ class Address(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Int? = null
+    private val id: Int? = null
 
-    fun getId(): Int? {
-        return this.id
+    fun getId(): Int {
+        return this.id!!
     }
 
     fun getCounty(): String {

@@ -15,7 +15,7 @@ class AddressController {
     private lateinit var addressRepository: AddressRepository
 
     @GetMapping("/all")
-    fun listAll(): List<Address> {
+    fun listAll(): MutableIterable<Address> {
         return addressRepository.findAll()
     }
 }

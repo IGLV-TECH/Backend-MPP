@@ -1,0 +1,7 @@
+###GET
+GET http://localhost:8080/addresses/all
+Content-Type: application/json
+
+###GET
+GET http://localhost:8080/items/findAllByCategory?categoryType=PLASTIC_AND_BOTTLE
+Content-Type: application/json

@@ -15,7 +15,7 @@ class EmployeeController {
     private lateinit var employeeRepository: EmployeeRepository
 
     @GetMapping("/all")
-    fun listAll(): List<Employee> {
+    fun listAll(): MutableIterable<Employee> {
         return employeeRepository.findAll()
     }
 }

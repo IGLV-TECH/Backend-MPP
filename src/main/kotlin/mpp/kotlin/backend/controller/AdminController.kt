@@ -15,7 +15,7 @@ class AdminController {
     private lateinit var adminRepository: AdminRepository
 
     @GetMapping("/all")
-    fun listAll(): List<Admin> {
+    fun listAll(): MutableIterable<Admin> {
         return adminRepository.findAll()
     }
 }

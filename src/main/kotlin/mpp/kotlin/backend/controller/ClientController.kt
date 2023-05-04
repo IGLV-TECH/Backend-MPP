@@ -15,7 +15,7 @@ class ClientController {
     private lateinit var clientRepository: ClientRepository
 
     @GetMapping("/all")
-    fun listAll(): List<Client> {
+    fun listAll(): MutableIterable<Client> {
         return clientRepository.findAll()
     }
 }

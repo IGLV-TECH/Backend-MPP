@@ -15,7 +15,7 @@ class InvoiceController {
     private lateinit var invoiceRepository: InvoiceRepository
 
     @GetMapping("/all")
-    fun listAll(): List<Invoice> {
+    fun listAll(): MutableIterable<Invoice> {
         return invoiceRepository.findAll()
     }
 }

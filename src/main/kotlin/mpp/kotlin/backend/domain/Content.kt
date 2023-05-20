@@ -17,4 +17,8 @@ class Content(
     private var item: Item,
     @Column(name = "quantity")
     private var quantity: Int
-) {}
+) {
+    override fun toString(): String {
+        return "Content(id=$id, quantity=$quantity)"
+    }
+}

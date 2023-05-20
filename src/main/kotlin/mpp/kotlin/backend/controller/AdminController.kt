@@ -1,7 +1,7 @@
 package mpp.kotlin.backend.controller
 
 import domain.Admin
-import mpp.kotlin.backend.repository.AdminRepository
+import mpp.kotlin.backend.service.AdminService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController
 class AdminController {
 
     @Autowired
-    private lateinit var adminRepository: AdminRepository
+    private lateinit var adminService: AdminService
 
     @GetMapping("/all")
-    fun listAll(): List<Admin> {
-        return adminRepository.findAll()
+    fun listAll(): MutableIterable<Admin> {
+        return adminService.findAll()
     }
 }

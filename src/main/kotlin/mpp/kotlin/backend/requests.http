@@ -1,0 +1,22 @@
+###GET
+GET http://localhost:8080/invoices/all
+Content-Type: application/json
+
+###GET
+GET http://localhost:8080/items/findAllByCategory?categoryType=PLASTIC_AND_BOTTLE
+Content-Type: application/json
+
+###POST
+POST http://localhost:8080/invoices
+Content-Type: application/json
+
+{
+  "client": 1,
+  "employee": 1,
+  "categoryType": "PLASTIC_AND_BOTTLE",
+  "penaltyPoints": 2,
+  "listItems": [
+    {"id": 6, "number": 5},
+    {"id": 7, "number": 3}
+  ]
+}

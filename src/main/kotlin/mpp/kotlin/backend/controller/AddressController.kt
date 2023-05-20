@@ -1,6 +1,6 @@
 package mpp.kotlin.backend.controller
 
-import mpp.kotlin.backend.repository.AddressRepository
+import mpp.kotlin.backend.service.AddressService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,10 +12,10 @@ import domain.Address as Address
 class AddressController {
 
     @Autowired
-    private lateinit var addressRepository: AddressRepository
+    private lateinit var addressService: AddressService
 
     @GetMapping("/all")
     fun listAll(): MutableIterable<Address> {
-        return addressRepository.findAll()
+        return addressService.findAll()
     }
 }

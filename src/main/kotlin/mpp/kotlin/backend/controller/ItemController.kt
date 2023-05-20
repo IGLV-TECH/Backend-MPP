@@ -5,7 +5,6 @@ import domain.Item
 import mpp.kotlin.backend.service.ItemsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -23,8 +22,7 @@ class ItemController {
     }
 
     @GetMapping("/findAllByCategory")
-    fun findAllByCategory(@RequestParam categoryType: CategoryType): Map<Int, String> {
-        //val categoryType = request["categoryType"]
+    fun findAllByCategory(@RequestParam categoryType: CategoryType): ArrayList<Map<String, String>> {
         return itemsService.findAllByCategory(categoryType)
     }
 }

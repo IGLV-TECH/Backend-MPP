@@ -1,7 +1,7 @@
 package mpp.kotlin.backend.controller
 
 import domain.Employee
-import mpp.kotlin.backend.repository.EmployeeRepository
+import mpp.kotlin.backend.service.EmployeeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController
 class EmployeeController {
 
     @Autowired
-    private lateinit var employeeRepository: EmployeeRepository
+    private lateinit var employeeService: EmployeeService
 
     @GetMapping("/all")
     fun listAll(): MutableIterable<Employee> {
-        return employeeRepository.findAll()
+        return employeeService.findAll()
     }
 }

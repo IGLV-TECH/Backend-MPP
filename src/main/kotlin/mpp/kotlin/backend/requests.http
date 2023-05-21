@@ -1,5 +1,5 @@
 ###GET
-GET http://localhost:8080/invoices/all
+GET http://localhost:8080/invoices/1
 Content-Type: application/json
 
 ###GET

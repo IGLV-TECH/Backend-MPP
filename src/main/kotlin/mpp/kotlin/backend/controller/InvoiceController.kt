@@ -1,9 +1,6 @@
 package mpp.kotlin.backend.controller
 
-import domain.CategoryType
-import domain.Content
-import domain.Invoice
-import domain.Item
+import domain.*
 import mpp.kotlin.backend.service.ClientService
 import mpp.kotlin.backend.service.EmployeeService
 import mpp.kotlin.backend.service.InvoiceService
@@ -31,6 +28,19 @@ class InvoiceController {
     @GetMapping("/all")
     fun listAll(): MutableIterable<Invoice> {
         return invoiceService.findAll()
+    }
+
+    @GetMapping("/{id}")
+    fun findOne(@PathVariable id: Int): Invoice {
+        return invoiceService.findOne(id)
+    }
+
+    @GetMapping("")
+    fun getInvoices(
+        @RequestParam("start", defaultValue = "0") start: Int,
+        @RequestParam("count", defaultValue = "5") count: Int
+    ): List<Invoice> {
+        return this.invoiceService.getAll(start, count)
     }
 
     @GetMapping("/{id}/items")

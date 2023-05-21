@@ -5,8 +5,6 @@ import mpp.kotlin.backend.service.ClientService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 
 @RestController
 @CrossOrigin(origins = ["*"])
@@ -31,18 +29,18 @@ class ClientController {
         @RequestParam("start", defaultValue = "0") start: Int,
         @RequestParam("count", defaultValue = "5") count: Int
     ): List<Client> {
-        return this.clientService.getClients(start, count)
+        return this.clientService.getAll(start, count)
     }
 
     @PostMapping("")
     fun addClient(@RequestBody client: Client): ResponseEntity<*> {
-        this.clientService.addClient(client)
+        this.clientService.add(client)
         return ResponseEntity.ok().build<Any>()
     }
 
     @PutMapping("/{id}")
     fun updateClient(@PathVariable id: Int, @RequestBody client: Client): ResponseEntity<*> {
-        this.clientService.updateClient(client)
+        this.clientService.update(client)
         return ResponseEntity.ok().build<Any>()
     }
 

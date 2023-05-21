@@ -24,16 +24,16 @@ class ClientService(
         }
     }
 
-    fun getClients(start: Int, count: Int): List<Client> {
+    fun getAll(start: Int, count: Int): List<Client> {
         val pageable: Pageable = PageRequest.of(start, count)
         return clientRepository.findAllClients(pageable)
     }
 
-    fun addClient(client: Client){
+    fun add(client: Client){
         this.clientRepository.save(client)
     }
 
-    fun updateClient(client: Client){
+    fun update(client: Client){
         this.clientRepository.save(client)
     }
 

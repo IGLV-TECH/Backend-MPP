@@ -22,4 +22,16 @@ class ClientService(
         }
     }
 
+    fun addClient(client: Client){
+        this.clientRepository.save(client)
+    }
+
+    fun updateClient(client: Client){
+        this.clientRepository.save(client)
+    }
+
+    fun deleteById(id: Int){
+        this.clientRepository.deleteById(id)
+    }
+
 }

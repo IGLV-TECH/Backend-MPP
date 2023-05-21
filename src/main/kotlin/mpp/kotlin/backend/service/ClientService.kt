@@ -4,6 +4,8 @@ import domain.Client
 import mpp.kotlin.backend.repository.ClientRepository
 import org.springframework.stereotype.Service
 import java.util.*
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 
 @Service
 class ClientService(
@@ -20,6 +22,11 @@ class ClientService(
         } else {
             throw RuntimeException("Client not found")
         }
+    }
+
+    fun getClients(start: Int, count: Int): List<Client> {
+        val pageable: Pageable = PageRequest.of(start, count)
+        return clientRepository.findAllClients(pageable)
     }
 
     fun addClient(client: Client){

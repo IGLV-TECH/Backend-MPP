@@ -5,6 +5,8 @@ import mpp.kotlin.backend.service.ClientService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 
 @RestController
 @CrossOrigin(origins = ["*"])
@@ -14,7 +16,7 @@ class ClientController {
     @Autowired
     private lateinit var clientService: ClientService
 
-    @GetMapping("")
+    @GetMapping("/all")
     fun listAll(): MutableIterable<Client> {
         return clientService.findAll()
     }
@@ -22,6 +24,14 @@ class ClientController {
     @GetMapping("/{id}")
     fun findOne(@PathVariable id: Int): Client {
         return clientService.findOne(id)
+    }
+
+    @GetMapping("")
+    fun getClients(
+        @RequestParam("start", defaultValue = "0") start: Int,
+        @RequestParam("count", defaultValue = "5") count: Int
+    ): List<Client> {
+        return this.clientService.getClients(start, count)
     }
 
     @PostMapping("")

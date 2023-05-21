@@ -1,5 +1,13 @@
 ###GET
-GET http://localhost:8080/clients
+GET http://localhost:8080/clients/all
+Content-Type: application/json
+
+###GET
+GET http://localhost:8080/clients/1
+Content-Type: application/json
+
+###GET
+GET http://localhost:8080/clients?start=1&count=2
 Content-Type: application/json
 
 ###DELETE

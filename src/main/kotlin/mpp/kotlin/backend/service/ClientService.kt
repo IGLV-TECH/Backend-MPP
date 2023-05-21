@@ -4,6 +4,8 @@ import domain.Client
 import mpp.kotlin.backend.repository.ClientRepository
 import org.springframework.stereotype.Service
 import java.util.*
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 
 @Service
 class ClientService(
@@ -22,6 +24,23 @@ class ClientService(
         }
     }
 
+    fun getAll(start: Int, count: Int): List<Client> {
+        val pageable: Pageable = PageRequest.of(start, count)
+        return clientRepository.findAllClients(pageable)
+    }
+
+    fun add(client: Client){
+        this.clientRepository.save(client)
+    }
+
+    fun update(client: Client){
+        this.clientRepository.save(client)
+    }
+
+    fun deleteById(id: Int){
+        this.clientRepository.deleteById(id)
+    }
+
     /**
      * Add amount to the balance of the client with clientId
      * @param amount: negative/positive/==0 float value
@@ -32,5 +51,4 @@ class ClientService(
         client.setBalance(client.getBalance() + amount)
         this.clientRepository.save(client)
     }
-
 }

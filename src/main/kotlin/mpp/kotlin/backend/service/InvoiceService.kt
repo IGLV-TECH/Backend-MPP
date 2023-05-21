@@ -3,8 +3,11 @@ package mpp.kotlin.backend.service
 import domain.*
 import mpp.kotlin.backend.payments.PaymentsService
 import mpp.kotlin.backend.repository.InvoiceRepository
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.util.*
 
 
 @Service
@@ -16,6 +19,15 @@ class InvoiceService(
         return invoiceRepository.findAll()
     }
 
+    fun findOne(id: Int): Invoice {
+        val optional: Optional<Invoice> = invoiceRepository.findById(id)
+        if (optional.isPresent) {
+            return optional.get()
+        } else {
+            throw RuntimeException("Client not found")
+        }
+    }
+
     fun getItems(id: Int): MutableIterable<Content> {
         val optional = invoiceRepository.findById(id)
         return if (optional.isPresent) {
@@ -25,6 +37,12 @@ class InvoiceService(
             throw RuntimeException("Invoice not found")
         }
     }
+
+    fun getAll(start: Int, count: Int): List<Invoice> {
+        val pageable: Pageable = PageRequest.of(start, count)
+        return invoiceRepository.findAllInvoices(pageable)
+    }
+
 
     fun addInvoice(
         client: Client, employee: Employee, categoryType: CategoryType, penaltyPoints: Int, listItems: Map<Item, Int>

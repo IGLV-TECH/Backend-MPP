@@ -22,4 +22,24 @@ class ClientService(
         }
     }
 
+    fun save(client: Client) {
+        if(clientRepository.findById(client.getId()).isEmpty) {
+            clientRepository.save(client)
+        } else {
+            throw RuntimeException("Client already added")
+        }
+    }
+
+    fun update(client: Client) {
+        if(clientRepository.findById(client.getId()).isPresent) {
+            clientRepository.save(client)
+        } else {
+            throw RuntimeException("Client non existent")
+        }
+    }
+
+    fun delete(id: Int) {
+        var client = findOne(id)
+        clientRepository.delete(client)
+    }
 }

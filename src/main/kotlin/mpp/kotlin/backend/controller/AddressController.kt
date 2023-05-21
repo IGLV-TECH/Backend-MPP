@@ -14,7 +14,7 @@ class AddressController {
     @Autowired
     private lateinit var addressService: AddressService
 
-    @GetMapping("/all")
+    @GetMapping()
     fun listAll(): MutableIterable<Address> {
         return addressService.findAll()
     }

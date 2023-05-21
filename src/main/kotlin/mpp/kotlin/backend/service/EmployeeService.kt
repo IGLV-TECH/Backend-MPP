@@ -22,4 +22,24 @@ class EmployeeService(
         }
     }
 
+    fun save(employee: Employee) {
+        if(employeeRepository.findById(employee.getId()).isEmpty) {
+            employeeRepository.save(employee)
+        } else {
+            throw RuntimeException("Employee already added")
+        }
+    }
+
+    fun update(employee: Employee) {
+        if(employeeRepository.findById(employee.getId()).isPresent) {
+            employeeRepository.save(employee)
+        } else {
+            throw RuntimeException("Employee not found")
+        }
+    }
+
+    fun delete(id: Int) {
+        var employee = findOne(id)
+        employeeRepository.delete(employee)
+    }
 }

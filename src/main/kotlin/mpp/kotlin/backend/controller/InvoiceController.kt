@@ -1,9 +1,6 @@
 package mpp.kotlin.backend.controller
 
-import domain.CategoryType
-import domain.Content
-import domain.Invoice
-import domain.Item
+import domain.*
 import mpp.kotlin.backend.service.ClientService
 import mpp.kotlin.backend.service.EmployeeService
 import mpp.kotlin.backend.service.InvoiceService
@@ -27,21 +24,25 @@ class InvoiceController {
     @Autowired
     private lateinit var itemsService: ItemsService
 
-    @GetMapping("/all")
-    fun listAll(): MutableIterable<Invoice> {
-        return invoiceService.findAll()
+    @GetMapping()
+    fun listAll(
+        @RequestParam("start") start: Int, @RequestParam("count") count: Int
+    ): List<Invoice> {
+        val all = invoiceService.findAll().toList()
+        val endIndex = (start + count).coerceAtMost(all.size)
+        return all.subList(start, endIndex)
     }
 
-    @GetMapping("/{id}/items")
-    fun getItems(@PathVariable("id") id: Int): MutableIterable<Content> {
-        return invoiceService.getItems(id)
-    }
+//    @GetMapping("/{id}/items")
+//    fun getItems(@PathVariable("id") id: Int): MutableIterable<Content> {
+//        return invoiceService.getItems(id)
+//    }
 
     @PostMapping()
     fun save(@RequestBody request: InvoiceRequest) {
-        val client = clientService.findOne(request.client)
+        val client = clientService.findOne(request.idClient)
         println(client)
-        val employee = employeeService.findOne(request.employee)
+        val employee = employeeService.findOne(request.idEmployee)
         println(employee)
         val list = mutableMapOf<Item, Int>()
         for (itemMap in request.listItems) {
@@ -53,11 +54,16 @@ class InvoiceController {
         }
         invoiceService.addInvoice(client, employee, request.categoryType, request.penaltyPoints, list)
     }
+
+    @GetMapping("/{id}")
+    fun findOne(@PathVariable id: Int): Invoice {
+        return invoiceService.findOne(id)
+    }
 }
 
 data class InvoiceRequest(
-    val client: Int,
-    val employee: Int,
+    val idClient: Int,
+    val idEmployee: Int,
     val categoryType: CategoryType,
     val penaltyPoints: Int,
     val listItems: List<Map<String, Int>>

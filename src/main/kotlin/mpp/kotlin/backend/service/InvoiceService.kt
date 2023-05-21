@@ -4,6 +4,7 @@ import domain.*
 import mpp.kotlin.backend.repository.InvoiceRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.util.*
 
 
 @Service
@@ -55,5 +56,14 @@ class InvoiceService(
         savedInvoice.items = items
         invoiceRepository.save(savedInvoice)
         println(savedInvoice)
+    }
+
+    fun findOne(id: Int): Invoice {
+        val optional: Optional<Invoice> = invoiceRepository.findById(id)
+        if (optional.isPresent) {
+            return optional.get()
+        } else {
+            throw RuntimeException("Invoice not found")
+        }
     }
 }

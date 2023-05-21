@@ -41,4 +41,14 @@ class ClientService(
         this.clientRepository.deleteById(id)
     }
 
+    /**
+     * Add amount to the balance of the client with clientId
+     * @param amount: negative/positive/==0 float value
+     * @param clientId: int
+     */
+    fun addToBalance(amount: Float, clientId: Int){
+        var client = this.findOne(clientId);
+        client.setBalance(client.getBalance() + amount)
+        this.clientRepository.save(client)
+    }
 }

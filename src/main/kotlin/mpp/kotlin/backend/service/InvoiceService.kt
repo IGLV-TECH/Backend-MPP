@@ -1,6 +1,7 @@
 package mpp.kotlin.backend.service
 
 import domain.*
+import mpp.kotlin.backend.payments.PaymentsService
 import mpp.kotlin.backend.repository.InvoiceRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -11,7 +12,8 @@ import java.util.*
 
 @Service
 class InvoiceService(
-    private val invoiceRepository: InvoiceRepository
+    private val invoiceRepository: InvoiceRepository,
+    private val paymentsService: PaymentsService
 ) {
     fun findAll(): MutableIterable<Invoice> {
         return invoiceRepository.findAll()
@@ -73,5 +75,8 @@ class InvoiceService(
         savedInvoice.items = items
         invoiceRepository.save(savedInvoice)
         println(savedInvoice)
+
+        /* that part will start the payment procedure to the client */
+        this.paymentsService.makePayment(client, payment)
     }
 }

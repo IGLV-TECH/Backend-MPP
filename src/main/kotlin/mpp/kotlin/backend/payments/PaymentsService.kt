@@ -11,7 +11,10 @@ class PaymentsService(
 )  {
 
     fun makePayment(client: Client, amount: Float){
-        println("I will make the transfer of " + amount + " to the client " + client.getId() )
+        println("Processing payment of " + amount + " to the client with id: " + client.getId())
+        this.clientService.addToBalance(amount, client.getId())
+
+        // to add revolut api
     }
 
 }

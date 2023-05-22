@@ -1,4 +1,5 @@
 ###GET
+<<<<<<< HEAD
 GET http://localhost:8080/items
 Content-Type: application/json
 
@@ -40,6 +41,13 @@ Content-Type: application/json
 
 ###DELETE
 DELETE http://localhost:8080/employees/3
+=======
+GET http://localhost:8080/invoices/1
+Content-Type: application/json
+
+###GET
+GET http://localhost:8080/clients/all
+>>>>>>> main
 Content-Type: application/json
 
 ###GET

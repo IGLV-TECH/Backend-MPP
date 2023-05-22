@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@CrossOrigin(origins = ["*"])
 @RequestMapping("/invoices")
 class InvoiceController {
 
@@ -37,6 +38,18 @@ class InvoiceController {
 //    fun getItems(@PathVariable("id") id: Int): MutableIterable<Content> {
 //        return invoiceService.getItems(id)
 //    }
+    @GetMapping("/{id}")
+    fun findOne(@PathVariable id: Int): Invoice {
+        return invoiceService.findOne(id)
+    }
+
+//    @GetMapping("")
+//    fun getInvoices(
+//        @RequestParam("start", defaultValue = "0") start: Int,
+//        @RequestParam("count", defaultValue = "5") count: Int
+//    ): List<Invoice> {
+//        return this.invoiceService.getAll(start, count)
+//    }
 
     @PostMapping()
     fun save(@RequestBody request: InvoiceRequest) {
@@ -53,11 +66,6 @@ class InvoiceController {
             list[item] = number
         }
         invoiceService.addInvoice(client, employee, request.categoryType, request.penaltyPoints, list)
-    }
-
-    @GetMapping("/{id}")
-    fun findOne(@PathVariable id: Int): Invoice {
-        return invoiceService.findOne(id)
     }
 }
 

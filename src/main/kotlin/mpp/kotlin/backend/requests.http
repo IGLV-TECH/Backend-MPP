@@ -1,6 +1,5 @@
 ###GET
-<<<<<<< HEAD
-GET http://localhost:8080/items
+GET http://localhost:8080/addresses
 Content-Type: application/json
 
 ###GET
@@ -20,7 +19,7 @@ Content-Type: application/json
   "firstName": "POST",
   "phoneNumber": "0777777777",
   "email": "post@mpp.com",
-  "parrwordC": "post",
+  "passwordC": "post",
   "balance": 10.5,
   "idAddress": 10
 }
@@ -34,20 +33,17 @@ Content-Type: application/json
   "firstName": "POST",
   "phoneNumber": "0777777777",
   "email": "post@mpp.com",
-  "parrwordC": "post",
+  "passwordC": "post",
   "balance": 10.5,
   "idAddress": 10
 }
 
 ###DELETE
 DELETE http://localhost:8080/employees/3
-=======
-GET http://localhost:8080/invoices/1
 Content-Type: application/json
 
 ###GET
-GET http://localhost:8080/clients/all
->>>>>>> main
+GET http://localhost:8080/clients/1
 Content-Type: application/json
 
 ###GET

@@ -16,7 +16,7 @@ class EmployeeService(
         return employeeRepository.findAll()
     }
 
-    fun findOne(id: Int): Employee {
+    fun findById(id: Int): Employee {
         val optional: Optional<Employee> = employeeRepository.findById(id)
         if (optional.isPresent) {
             return optional.get()
@@ -26,25 +26,18 @@ class EmployeeService(
     }
 
     fun save(employee: Employee) {
-        if(employeeRepository.findById(employee.getId()).isEmpty) {
-            employeeRepository.save(employee)
-        } else {
-            throw RuntimeException("Employee already added")
-        }
+        employeeRepository.save(employee)
     }
 
     fun update(employee: Employee) {
-        if(employeeRepository.findById(employee.getId()).isPresent) {
-            employeeRepository.save(employee)
-        } else {
-            throw RuntimeException("Employee not found")
-        }
+        employeeRepository.save(employee)
     }
 
     fun delete(id: Int) {
-        var employee = findOne(id)
+        var employee = findById(id)
         employeeRepository.delete(employee)
     }
+
 //    fun getAll(start: Int, count: Int): List<Employee> {
 //        val pageable: Pageable = PageRequest.of(start, count)
 //        return employeeRepository.findAllEmployees(pageable)

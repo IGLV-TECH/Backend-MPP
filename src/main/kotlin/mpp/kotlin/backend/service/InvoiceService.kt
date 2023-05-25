@@ -3,8 +3,6 @@ package mpp.kotlin.backend.service
 import domain.*
 import mpp.kotlin.backend.payments.PaymentsService
 import mpp.kotlin.backend.repository.InvoiceRepository
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.*
@@ -29,10 +27,10 @@ class InvoiceService(
         }
     }
 
-    fun getAll(start: Int, count: Int): List<Invoice> {
-        val pageable: Pageable = PageRequest.of(start, count)
-        return invoiceRepository.findAllInvoices(pageable)
-    }
+//    fun getAll(start: Int, count: Int): List<Invoice> {
+//        val pageable: Pageable = PageRequest.of(start, count)
+//        return invoiceRepository.findAllInvoices(pageable)
+//    }
 
 
     fun addInvoice(
@@ -51,9 +49,6 @@ class InvoiceService(
         var penalty = (penaltyPoints / bonusPoints) * payment
         payment -= penalty
 
-        println(penalty)
-        println(payment)
-
         var invoice = Invoice(categoryType, payment, penalty, LocalDate.now(), client, employee)
         val savedInvoice = invoiceRepository.save(invoice)
 
@@ -65,13 +60,12 @@ class InvoiceService(
         }
         savedInvoice.items = items
         invoiceRepository.save(savedInvoice)
-        println(savedInvoice)
 
         /* that part will start the payment procedure to the client */
         this.paymentsService.makePayment(client, payment)
     }
 
-    fun findOne(id: Int): Invoice {
+    fun findById(id: Int): Invoice {
         val optional: Optional<Invoice> = invoiceRepository.findById(id)
         if (optional.isPresent) {
             return optional.get()

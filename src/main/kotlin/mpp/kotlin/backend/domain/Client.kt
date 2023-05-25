@@ -18,7 +18,7 @@ class Client(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Int? = null
+    private var id: Int? = null
 
     fun getId(): Int {
         return this.id!!
@@ -52,8 +52,12 @@ class Client(
         return this.address
     }
 
-    fun setBalance(newBalance: Float){
+    fun setBalance(newBalance: Float) {
         this.balance = newBalance
+    }
+
+    fun setId(newId: Int) {
+        this.id = newId
     }
 
     override fun equals(other: Any?): Boolean {

@@ -30,6 +30,9 @@ class InvoiceController {
         @RequestParam("start") start: Int, @RequestParam("count") count: Int
     ): List<Invoice> {
         val all = invoiceService.findAll().toList()
+        for(i in all) {
+            println(i)
+        }
         val endIndex = (start + count).coerceAtMost(all.size)
         return all.subList(start, endIndex)
     }
@@ -39,8 +42,8 @@ class InvoiceController {
 //        return invoiceService.getItems(id)
 //    }
     @GetMapping("/{id}")
-    fun findOne(@PathVariable id: Int): Invoice {
-        return invoiceService.findOne(id)
+    fun findById(@PathVariable id: Int): Invoice {
+        return invoiceService.findById(id)
     }
 
 //    @GetMapping("")
@@ -53,14 +56,14 @@ class InvoiceController {
 
     @PostMapping()
     fun save(@RequestBody request: InvoiceRequest) {
-        val client = clientService.findOne(request.idClient)
+        val client = clientService.findById(request.idClient)
         println(client)
-        val employee = employeeService.findOne(request.idEmployee)
+        val employee = employeeService.findById(request.idEmployee)
         println(employee)
         val list = mutableMapOf<Item, Int>()
         for (itemMap in request.listItems) {
             val id = itemMap["id"]!!
-            val item = itemsService.findOne(id)
+            val item = itemsService.findById(id)
             println(item)
             val number = itemMap["number"]!!
             list[item] = number
@@ -68,11 +71,3 @@ class InvoiceController {
         invoiceService.addInvoice(client, employee, request.categoryType, request.penaltyPoints, list)
     }
 }
-
-data class InvoiceRequest(
-    val idClient: Int,
-    val idEmployee: Int,
-    val categoryType: CategoryType,
-    val penaltyPoints: Int,
-    val listItems: List<Map<String, Int>>
-)

@@ -18,49 +18,67 @@
     - `listAll`: GET http://localhost:8080/admins
 - **Client**
     - `list`: GET http://localhost:8080/clients?start=0&count=3
-    - `findOne`: GET http://localhost:8080/clients/id
-    - `save **NEIMPLEMENTAT**`: POST http://localhost:8080/clients {
+    - `findById`: GET http://localhost:8080/clients/id
+    - `save`: POST http://localhost:8080/clients {
         - "lastName":
         - "firstName":
         - "phoneNumber":
         - "email":
-        - "parrwordC":
+        - "password":
         - "balance":
-        - "idAddress": }
-    - `update **NEIMPLEMENTAT**`: PUT http://localhost:8080/clients/id {
+        - "address": {
+          - "county":
+          - "city":
+          - "street":
+          - "number":
+          - "ZIPCode": }
+    - `update`: PUT http://localhost:8080/clients/id {
         - "id":
         - "lastName":
         - "firstName":
         - "phoneNumber":
         - "email":
-        - "parrwordC":
+        - "password":
         - "balance":
-        - "idAddress": }
+        - "address": {
+          - "county":
+          - "city":
+          - "street":
+          - "number":
+          - "ZIPCode": }
     - `delete`: DELETE http://localhost:8080/clients/id
 - **Employee**
     - `list`: GET http://localhost:8080/employees?start=0&count=3
-    - `findOne`: GET http://localhost:8080/employees/id
-    - `save **NEIMPLEMENTAT**`: POST http://localhost:8080/employees {
+    - `findById`: GET http://localhost:8080/employees/id
+    - `save`: POST http://localhost:8080/employees {
         - "lastName":
         - "firstName":
         - "phoneNumber":
         - "email":
-        - "parrwordC":
-        - "balance":
-        - "idAddress": }
-    - `update **NEIMPLEMENTAT**`: PUT http://localhost:8080/employees/id {
+        - "password":
+        - "address": {
+          - "county":
+          - "city":
+          - "street":
+          - "number":
+          - "ZIPCode": }
+    - `update`: PUT http://localhost:8080/employees/id {
         - "id":
         - "lastName":
         - "firstName":
         - "phoneNumber":
         - "email":
-        - "parrwordC":
-        - "balance":
-        - "idAddress": }
+        - "password":
+        - "address": {
+          - "county":
+          - "city":
+          - "street":
+          - "number":
+          - "ZIPCode": }
     - `delete`: DELETE http://localhost:8080/employees/id
 - **Invoice**
     - `list`: GET http://localhost:8080/invoices?start=0&count=3
-    - `findOne`: GET http://localhost:8080/invoices/id
+    - `findById`: GET http://localhost:8080/invoices/id
     - `save`: POST http://localhost:8080/invoices {
         - "idClient":
         - "idEmployee":

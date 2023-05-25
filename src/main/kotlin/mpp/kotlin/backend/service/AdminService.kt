@@ -13,7 +13,7 @@ class AdminService(
         return adminRepository.findAll()
     }
 
-    fun findOne(id: Int): Admin {
+    fun findById(id: Int): Admin {
         val optional: Optional<Admin> = adminRepository.findById(id)
         if (optional.isPresent) {
             return optional.get()

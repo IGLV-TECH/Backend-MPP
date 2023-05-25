@@ -1,6 +1,7 @@
 package mpp.kotlin.backend.controller
 
 import domain.Client
+import mpp.kotlin.backend.service.AddressService
 import mpp.kotlin.backend.service.ClientService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -12,8 +13,9 @@ class ClientController {
 
     @Autowired
     private lateinit var clientService: ClientService
+
     @Autowired
-    private lateinit var addressController: AddressController
+    private lateinit var addressService: AddressService
 
     @GetMapping()
     fun listAll(
@@ -25,19 +27,42 @@ class ClientController {
     }
 
     @GetMapping("/{id}")
-    fun findOne(@PathVariable id: Int): Client {
-        return clientService.findOne(id)
+    fun findById(@PathVariable id: Int): Client {
+        return clientService.findById(id)
     }
 
-//    @PostMapping()
-//    fun save(@RequestBody client: Client) {
-//        clientService.save(client)
-//    }
-//
-//    @PutMapping("/{id}")
-//    fun update(@RequestBody client: Client) {
-//        clientService.update(client)
-//    }
+    @PostMapping()
+    fun save(@RequestBody request: ClientRequest) {
+        val address = request.address
+        val id = addressService.findOne(address)
+        var client = Client(
+            request.lastName,
+            request.firstName,
+            request.phoneNumber,
+            request.email,
+            request.password,
+            request.balance,
+            addressService.findById(id)
+        )
+        clientService.save(client)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Int, @RequestBody request: ClientRequest) {
+        val address = request.address
+        val idAddress = addressService.findOne(address)
+        var client = Client(
+            request.lastName,
+            request.firstName,
+            request.phoneNumber,
+            request.email,
+            request.password,
+            request.balance,
+            addressService.findById(idAddress)
+        )
+        client.setId(id)
+        clientService.update(client)
+    }
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int) {

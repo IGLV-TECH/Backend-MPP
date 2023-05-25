@@ -5,27 +5,27 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "Employees")
 class Employee(
-    @Column(name = "last_name")
-    private var lastName: String,
-    @Column(name = "first_name")
-    private var firstName: String,
-    @Column(name = "phone")
-    private var phoneNumber: String,
-    @Column(name = "email")
-    private var email: String,
-    @Column(name = "passwordE")
-    private var password: String,
-    @OneToOne(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_address", referencedColumnName = "ID")
-    private var address: Address
+    @Column(name = "last_name") private var lastName: String,
+    @Column(name = "first_name") private var firstName: String,
+    @Column(name = "phone") private var phoneNumber: String,
+    @Column(name = "email") private var email: String,
+    @Column(name = "passwordE") private var password: String,
+    @OneToOne(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER) @JoinColumn(
+        name = "id_address",
+        referencedColumnName = "ID"
+    ) private var address: Address
 ) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Int? = null
+    private var id: Int? = null
 
     fun getId(): Int {
         return this.id!!
+    }
+
+    fun setId(id: Int) {
+        this.id = id
     }
 
     fun getLastName(): String {

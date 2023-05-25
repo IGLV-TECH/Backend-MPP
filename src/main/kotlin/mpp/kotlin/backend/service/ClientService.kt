@@ -4,8 +4,6 @@ import domain.Client
 import mpp.kotlin.backend.repository.ClientRepository
 import org.springframework.stereotype.Service
 import java.util.*
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 
 @Service
 class ClientService(
@@ -15,7 +13,7 @@ class ClientService(
         return clientRepository.findAll()
     }
 
-    fun findOne(id: Int): Client {
+    fun findById(id: Int): Client {
         val optional: Optional<Client> = clientRepository.findById(id)
         if (optional.isPresent) {
             return optional.get()
@@ -25,23 +23,15 @@ class ClientService(
     }
 
     fun save(client: Client) {
-        if(clientRepository.findById(client.getId()).isEmpty) {
-            clientRepository.save(client)
-        } else {
-            throw RuntimeException("Client already added")
-        }
+        clientRepository.save(client)
     }
 
     fun update(client: Client) {
-        if(clientRepository.findById(client.getId()).isPresent) {
-            clientRepository.save(client)
-        } else {
-            throw RuntimeException("Client non existent")
-        }
+        clientRepository.save(client)
     }
 
     fun delete(id: Int) {
-        var client = findOne(id)
+        var client = findById(id)
         clientRepository.delete(client)
     }
 
@@ -68,7 +58,7 @@ class ClientService(
      * @param clientId: int
      */
     fun addToBalance(amount: Float, clientId: Int){
-        var client = this.findOne(clientId);
+        var client = this.findById(clientId);
         client.setBalance(client.getBalance() + amount)
         this.clientRepository.save(client)
     }

@@ -1,10 +1,9 @@
 package mpp.kotlin.backend.controller
 
-import domain.Client
 import domain.Employee
+import mpp.kotlin.backend.service.AddressService
 import mpp.kotlin.backend.service.EmployeeService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -14,8 +13,9 @@ class EmployeeController {
 
     @Autowired
     private lateinit var employeeService: EmployeeService
+
     @Autowired
-    private lateinit var addressController: AddressController
+    private lateinit var addressService: AddressService
 
     @GetMapping()
     fun listAll(
@@ -27,19 +27,40 @@ class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    fun findOne(@PathVariable id: Int): Employee {
-        return employeeService.findOne(id)
+    fun findById(@PathVariable id: Int): Employee {
+        return employeeService.findById(id)
     }
 
-//    @PostMapping()
-//    fun save(@RequestBody employee: Employee) {
-//        employeeService.save(employee)
-//    }
-//
-//    @PutMapping("/{id}")
-//    fun update(@RequestBody employee: Employee) {
-//        employeeService.update(employee)
-//    }
+    @PostMapping()
+    fun save(@RequestBody request: EmployeeRequest) {
+        val address = request.address
+        val id = addressService.findOne(address)
+        var employee = Employee(
+            request.lastName,
+            request.firstName,
+            request.phoneNumber,
+            request.email,
+            request.password,
+            addressService.findById(id)
+        )
+        employeeService.save(employee)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Int, @RequestBody request: EmployeeRequest) {
+        val address = request.address
+        val idAddress = addressService.findOne(address)
+        var employee = Employee(
+            request.lastName,
+            request.firstName,
+            request.phoneNumber,
+            request.email,
+            request.password,
+            addressService.findById(idAddress)
+        )
+        employee.setId(id)
+        employeeService.update(employee)
+    }
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int) {

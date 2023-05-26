@@ -25,39 +25,45 @@ class InvoiceController {
     @Autowired
     private lateinit var itemsService: ItemsService
 
-    @GetMapping("/all")
-    fun listAll(): MutableIterable<Invoice> {
-        return invoiceService.findAll()
-    }
-
-    @GetMapping("/{id}")
-    fun findOne(@PathVariable id: Int): Invoice {
-        return invoiceService.findOne(id)
-    }
-
-    @GetMapping("")
-    fun getInvoices(
-        @RequestParam("start", defaultValue = "0") start: Int,
-        @RequestParam("count", defaultValue = "5") count: Int
+    @GetMapping()
+    fun listAll(
+        @RequestParam("start") start: Int, @RequestParam("count") count: Int
     ): List<Invoice> {
-        return this.invoiceService.getAll(start, count)
+        val all = invoiceService.findAll().toList()
+        for(i in all) {
+            println(i)
+        }
+        val endIndex = (start + count).coerceAtMost(all.size)
+        return all.subList(start, endIndex)
     }
 
-    @GetMapping("/{id}/items")
-    fun getItems(@PathVariable("id") id: Int): MutableIterable<Content> {
-        return invoiceService.getItems(id)
+//    @GetMapping("/{id}/items")
+//    fun getItems(@PathVariable("id") id: Int): MutableIterable<Content> {
+//        return invoiceService.getItems(id)
+//    }
+    @GetMapping("/{id}")
+    fun findById(@PathVariable id: Int): Invoice {
+        return invoiceService.findById(id)
     }
+
+//    @GetMapping("")
+//    fun getInvoices(
+//        @RequestParam("start", defaultValue = "0") start: Int,
+//        @RequestParam("count", defaultValue = "5") count: Int
+//    ): List<Invoice> {
+//        return this.invoiceService.getAll(start, count)
+//    }
 
     @PostMapping()
     fun save(@RequestBody request: InvoiceRequest) {
-        val client = clientService.findOne(request.client)
+        val client = clientService.findById(request.idClient)
         println(client)
-        val employee = employeeService.findOne(request.employee)
+        val employee = employeeService.findById(request.idEmployee)
         println(employee)
         val list = mutableMapOf<Item, Int>()
         for (itemMap in request.listItems) {
             val id = itemMap["id"]!!
-            val item = itemsService.findOne(id)
+            val item = itemsService.findById(id)
             println(item)
             val number = itemMap["number"]!!
             list[item] = number
@@ -65,11 +71,3 @@ class InvoiceController {
         invoiceService.addInvoice(client, employee, request.categoryType, request.penaltyPoints, list)
     }
 }
-
-data class InvoiceRequest(
-    val client: Int,
-    val employee: Int,
-    val categoryType: CategoryType,
-    val penaltyPoints: Int,
-    val listItems: List<Map<String, Int>>
-)

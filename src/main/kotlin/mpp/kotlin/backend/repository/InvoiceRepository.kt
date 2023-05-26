@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface InvoiceRepository: CrudRepository<Invoice, Int> {
-    @Query("SELECT i FROM Invoice i ORDER BY i.id ASC")
-    fun findAllInvoices(pageable: Pageable): List<Invoice>
+//    @Query("SELECT i FROM Invoice i ORDER BY i.id ASC")
+//    fun findAllInvoices(pageable: Pageable): List<Invoice>
 }

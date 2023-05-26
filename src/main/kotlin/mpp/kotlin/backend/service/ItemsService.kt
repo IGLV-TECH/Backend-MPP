@@ -26,7 +26,7 @@ class ItemsService(
         return list
     }
 
-    fun findOne(id: Int): Item {
+    fun findById(id: Int): Item {
         val optionalClient: Optional<Item> = itemRepository.findById(id)
         if (optionalClient.isPresent) {
             return optionalClient.get()

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface EmployeeRepository: CrudRepository<Employee, Int> {
-    @Query("SELECT e FROM Employee e ORDER BY e.id ASC")
-    fun findAllEmployees(pageable: Pageable): List<Employee>
+//    @Query("SELECT e FROM Employee e ORDER BY e.id ASC")
+//    fun findAllEmployees(pageable: Pageable): List<Employee>
 }

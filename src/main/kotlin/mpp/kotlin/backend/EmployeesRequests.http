@@ -1,13 +1,9 @@
 ###GET
-GET http://localhost:8080/employees/all
-Content-Type: application/json
-
-###GET
 GET http://localhost:8080/employees/1
 Content-Type: application/json
 
 ###GET
-GET http://localhost:8080/employees?start=0&count=2
+GET http://localhost:8080/employees?start=0&count=10
 Content-Type: application/json
 
 ###DELETE
@@ -18,18 +14,16 @@ POST http://localhost:8080/employees
 Content-Type: application/json
 
 {
-  "lastName": "TestPosted",
-  "firstName": "TestPosted",
+  "lastName": "POST",
+  "firstName": "POST",
   "phoneNumber": "07noidoi",
-  "email": "test@mpp.com",
+  "email": "post@mpp.com",
   "password": "admin",
-  "balance": 15.1,
   "address": {
     "county": "Test",
     "city": "Test",
     "street": "Test",
-    "number": 6,
-    "id": 1,
+    "number": 100,
     "ZIPCode": "1234"
   }
 }
@@ -39,10 +33,10 @@ PUT http://localhost:8080/employees/1
 Content-Type: application/json
 
 {
-  "lastName": "Testputted22",
-  "firstName": "TestPutted22",
-  "phoneNumber": "07noidoi22",
-  "email": "test@mpp.com",
+  "lastName": "PUT",
+  "firstName": "PUT",
+  "phoneNumber": "07noidoi",
+  "email": "put@mpp.com",
   "password": "admin",
   "balance": 15.1,
   "address": {
@@ -50,8 +44,6 @@ Content-Type: application/json
     "city": "Test",
     "street": "Test",
     "number": 6,
-    "id": 1,
     "ZIPCode": "1234"
-  },
-  "id": 1
+  }
 }

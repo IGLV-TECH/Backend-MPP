@@ -19,6 +19,6 @@ class Content(
     private var quantity: Int
 ) {
     override fun toString(): String {
-        return "Content(id=$id, quantity=$quantity)"
+        return "Content(invoice=${invoice.getId()}, item=${item.getId()}, quantity=$quantity)"
     }
 }

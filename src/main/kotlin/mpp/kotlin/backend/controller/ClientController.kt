@@ -1,9 +1,9 @@
 package mpp.kotlin.backend.controller
 
 import domain.Client
+import mpp.kotlin.backend.service.AddressService
 import mpp.kotlin.backend.service.ClientService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -14,39 +14,83 @@ class ClientController {
     @Autowired
     private lateinit var clientService: ClientService
 
-    @GetMapping("/all")
-    fun listAll(): MutableIterable<Client> {
-        return clientService.findAll()
+    @Autowired
+    private lateinit var addressService: AddressService
+
+    @GetMapping()
+    fun listAll(
+        @RequestParam("start") start: Int, @RequestParam("count") count: Int
+    ): List<Client> {
+        val all = clientService.findAll().toList()
+        val endIndex = (start + count).coerceAtMost(all.size)
+        return all.subList(start, endIndex)
     }
 
     @GetMapping("/{id}")
-    fun findOne(@PathVariable id: Int): Client {
-        return clientService.findOne(id)
+    fun findById(@PathVariable id: Int): Client {
+        return clientService.findById(id)
     }
 
-    @GetMapping("")
-    fun getClients(
-        @RequestParam("start", defaultValue = "0") start: Int,
-        @RequestParam("count", defaultValue = "5") count: Int
-    ): List<Client> {
-        return this.clientService.getAll(start, count)
-    }
-
-    @PostMapping("")
-    fun addClient(@RequestBody client: Client): ResponseEntity<*> {
-        this.clientService.add(client)
-        return ResponseEntity.ok().build<Any>()
+    @PostMapping()
+    fun save(@RequestBody request: ClientRequest) {
+        val address = request.address
+        val id = addressService.findOne(address)
+        var client = Client(
+            request.lastName,
+            request.firstName,
+            request.phoneNumber,
+            request.email,
+            request.password,
+            request.balance,
+            addressService.findById(id)
+        )
+        clientService.save(client)
     }
 
     @PutMapping("/{id}")
-    fun updateClient(@PathVariable id: Int, @RequestBody client: Client): ResponseEntity<*> {
-        this.clientService.update(client)
-        return ResponseEntity.ok().build<Any>()
+    fun update(@PathVariable id: Int, @RequestBody request: ClientRequest) {
+        val address = request.address
+        val idAddress = addressService.findOne(address)
+        var client = Client(
+            request.lastName,
+            request.firstName,
+            request.phoneNumber,
+            request.email,
+            request.password,
+            request.balance,
+            addressService.findById(idAddress)
+        )
+        client.setId(id)
+        clientService.update(client)
     }
 
     @DeleteMapping("/{id}")
-    fun deleteOne(@PathVariable id: Int): ResponseEntity<*> {
-        this.clientService.deleteById(id)
-        return ResponseEntity.ok().build<Any>()
+    fun delete(@PathVariable id: Int) {
+        clientService.delete(id);
+
+//    @GetMapping("")
+//    fun getClients(
+//        @RequestParam("start", defaultValue = "0") start: Int,
+//        @RequestParam("count", defaultValue = "5") count: Int
+//    ): List<Client> {
+//        return this.clientService.getAll(start, count)
+//    }
+
+//    @PostMapping("")
+//    fun addClient(@RequestBody client: Client): ResponseEntity<*> {
+//        this.clientService.add(client)
+//        return ResponseEntity.ok().build<Any>()
+//    }
+
+//    @PutMapping("/{id}")
+//    fun updateClient(@PathVariable id: Int, @RequestBody client: Client): ResponseEntity<*> {
+//        this.clientService.update(client)
+//        return ResponseEntity.ok().build<Any>()
+//    }
+
+//    @DeleteMapping("/{id}")
+//    fun deleteOne(@PathVariable id: Int): ResponseEntity<*> {
+//        this.clientService.deleteById(id)
+//        return ResponseEntity.ok().build<Any>()
     }
 }

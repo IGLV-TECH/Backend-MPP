@@ -3,5 +3,5 @@ GET http://localhost:8080/invoices/1
 Content-Type: application/json
 
 ###GET
-GET http://localhost:8080/invoices?start=1&count=2
+GET http://localhost:8080/invoices?start=0&count=2
 Content-Type: application/json

@@ -14,7 +14,7 @@ class ItemController {
     @Autowired
     private lateinit var itemsService: ItemsService
 
-    @GetMapping("/all")
+    @GetMapping()
     fun listAll(): MutableIterable<Item> {
         return itemsService.findAll()
     }

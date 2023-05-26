@@ -16,7 +16,7 @@ class AdminController {
     @Autowired
     private lateinit var adminService: AdminService
 
-    @GetMapping("/all")
+    @GetMapping()
     fun listAll(): MutableIterable<Admin> {
         return adminService.findAll()
     }

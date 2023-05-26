@@ -16,7 +16,7 @@ class EmployeeService(
         return employeeRepository.findAll()
     }
 
-    fun findOne(id: Int): Employee {
+    fun findById(id: Int): Employee {
         val optional: Optional<Employee> = employeeRepository.findById(id)
         if (optional.isPresent) {
             return optional.get()
@@ -25,21 +25,33 @@ class EmployeeService(
         }
     }
 
-    fun getAll(start: Int, count: Int): List<Employee> {
-        val pageable: Pageable = PageRequest.of(start, count)
-        return employeeRepository.findAllEmployees(pageable)
+    fun save(employee: Employee) {
+        employeeRepository.save(employee)
     }
 
-    fun add(employee: Employee){
-        this.employeeRepository.save(employee)
+    fun update(employee: Employee) {
+        employeeRepository.save(employee)
     }
 
-    fun update(employee: Employee){
-        this.employeeRepository.save(employee)
+    fun delete(id: Int) {
+        var employee = findById(id)
+        employeeRepository.delete(employee)
     }
 
-    fun deleteById(id: Int){
-        this.employeeRepository.deleteById(id)
-    }
-
+//    fun getAll(start: Int, count: Int): List<Employee> {
+//        val pageable: Pageable = PageRequest.of(start, count)
+//        return employeeRepository.findAllEmployees(pageable)
+//    }
+//
+//    fun add(employee: Employee){
+//        this.employeeRepository.save(employee)
+//    }
+//
+//    fun update(employee: Employee){
+//        this.employeeRepository.save(employee)
+//    }
+//
+//    fun deleteById(id: Int){
+//        this.employeeRepository.deleteById(id)
+//    }
 }

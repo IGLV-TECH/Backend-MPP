@@ -31,18 +31,12 @@ class InvoiceController {
     @GetMapping()
     fun listAll(
         @RequestParam("start") start: Int, @RequestParam("count") count: Int
-    ): ResponseEntity<String> {
+    ): List<Invoice> {
         val all = invoiceService.findAll().toList()
         val endIndex = (start + count).coerceAtMost(all.size)
-        val list = all.subList(start, endIndex).map { InvoiceResponse(it.getId(),it.getCategory(),it.getPayment(),it.getPenalty(),it.getDate().toString(),it.getClient(),it.getEmployee(),it.items) }
-        val jsonResponse = ObjectMapper().writeValueAsString(list)
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonResponse)
+        return all.subList(start, endIndex)
     }
 
-//    @GetMapping("/{id}/items")
-//    fun getItems(@PathVariable("id") id: Int): MutableIterable<Content> {
-//        return invoiceService.getItems(id)
-//    }
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Int): Invoice {
         return invoiceService.findById(id)

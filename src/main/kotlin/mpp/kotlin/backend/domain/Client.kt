@@ -60,19 +60,24 @@ class Client(
         this.id = newId
     }
 
+    fun myEquals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Client
+
+        if (email != other.email) return false
+        if (password != other.password) return false
+
+        return true
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as Client
 
-        if (lastName != other.lastName) return false
-        if (firstName != other.firstName) return false
-        if (phoneNumber != other.phoneNumber) return false
-        if (email != other.email) return false
-        if (password != other.password) return false
-        if (balance != other.balance) return false
-        if (address != other.address) return false
         if (id != other.id) return false
 
         return true

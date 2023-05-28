@@ -2,6 +2,11 @@ package mpp.kotlin.backend.controller
 
 import domain.*
 
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
 data class InvoiceRequest(
     val idClient: Int,
     val idEmployee: Int,

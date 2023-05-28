@@ -42,20 +42,10 @@ class InvoiceController {
         return invoiceService.findById(id)
     }
 
-//    @GetMapping("")
-//    fun getInvoices(
-//        @RequestParam("start", defaultValue = "0") start: Int,
-//        @RequestParam("count", defaultValue = "5") count: Int
-//    ): List<Invoice> {
-//        return this.invoiceService.getAll(start, count)
-//    }
-
     @PostMapping()
     fun save(@RequestBody request: InvoiceRequest) {
         val client = clientService.findById(request.idClient)
-        println(client)
         val employee = employeeService.findById(request.idEmployee)
-        println(employee)
         val list = mutableMapOf<Item, Int>()
         for (itemMap in request.listItems) {
             val id = itemMap["id"]!!

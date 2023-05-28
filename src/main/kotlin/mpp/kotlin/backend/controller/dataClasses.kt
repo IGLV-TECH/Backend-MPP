@@ -2,17 +2,6 @@ package mpp.kotlin.backend.controller
 
 import domain.*
 
-data class InvoiceResponse(
-    val id: Int,
-    val categoryType: CategoryType,
-    val payment: Float,
-    val penalty: Float,
-    val date: String,
-    val client: Client,
-    val employee: Employee,
-    val listItems: List<Content>
-)
-
 data class InvoiceRequest(
     val idClient: Int,
     val idEmployee: Int,

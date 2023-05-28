@@ -1,17 +1,30 @@
 ###GET
+GET http://localhost:8080/employees/login
+Content-Type: application/json
+
+{
+  "email": "test1@mpp.com",
+  "password": "employee1"
+}
+
+###GET
 GET http://localhost:8080/employees/1
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwiaWF0IjoxNjg1MzAwNjgzLCJleHAiOjE2ODUzMDQyODN9.SuNOg3DJWLFqzlt2cM4IZJst6qTmz0vMPgeSK-q5Ej8rHY5Hj0RuL9w31b1wHVXIY8NCTcUEAshS1Iz_dksBnw
 
 ###GET
 GET http://localhost:8080/employees?start=0&count=10
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwiaWF0IjoxNjg1MzAwNjgzLCJleHAiOjE2ODUzMDQyODN9.SuNOg3DJWLFqzlt2cM4IZJst6qTmz0vMPgeSK-q5Ej8rHY5Hj0RuL9w31b1wHVXIY8NCTcUEAshS1Iz_dksBnw
 
 ###DELETE
 DELETE http://localhost:8080/employees/2
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwiaWF0IjoxNjg1MzAwNjgzLCJleHAiOjE2ODUzMDQyODN9.SuNOg3DJWLFqzlt2cM4IZJst6qTmz0vMPgeSK-q5Ej8rHY5Hj0RuL9w31b1wHVXIY8NCTcUEAshS1Iz_dksBnw
 
 ###POST
 POST http://localhost:8080/employees
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwiaWF0IjoxNjg1MzAwNjgzLCJleHAiOjE2ODUzMDQyODN9.SuNOg3DJWLFqzlt2cM4IZJst6qTmz0vMPgeSK-q5Ej8rHY5Hj0RuL9w31b1wHVXIY8NCTcUEAshS1Iz_dksBnw
 
 {
   "lastName": "POST",
@@ -31,6 +44,7 @@ Content-Type: application/json
 ###PUT
 PUT http://localhost:8080/employees/1
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwiaWF0IjoxNjg1MzAwNjgzLCJleHAiOjE2ODUzMDQyODN9.SuNOg3DJWLFqzlt2cM4IZJst6qTmz0vMPgeSK-q5Ej8rHY5Hj0RuL9w31b1wHVXIY8NCTcUEAshS1Iz_dksBnw
 
 {
   "lastName": "PUT",

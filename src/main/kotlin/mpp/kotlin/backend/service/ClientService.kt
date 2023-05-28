@@ -28,13 +28,10 @@ class ClientService(
 
     fun save(client: Client) {
         for (c in clientRepository.findAll()) if (c.getEmail() == client.getEmail()) {
-            println("Im in existingClient != null !!!!!!!!!!!!!!!!!!")
             throw RuntimeException("Email already used")
         }
-        println("Ev good, came to saving!")
         clientRepository.save(client)
     }
-
 
     fun update(client: Client) {
         if (!clientRepository.existsById(client.getId())) {

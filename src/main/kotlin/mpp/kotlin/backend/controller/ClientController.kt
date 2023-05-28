@@ -21,6 +21,7 @@ class ClientController {
 
     @Autowired
     private lateinit var addressService: AddressService
+
     private val tokenProvider: TokenProvider = TokenProvider()
 
     @GetMapping("/login")
@@ -44,9 +45,7 @@ class ClientController {
             val all = clientService.findAll().toList()
             val endIndex = (start + count).coerceAtMost(all.size)
             return all.subList(start, endIndex)
-        } else {
-            throw UnauthorizedException("Invalid token")
-        }
+        } else throw UnauthorizedException("Invalid token")
     }
 
     @GetMapping("/{id}")
@@ -55,7 +54,7 @@ class ClientController {
             try {
                 return clientService.findById(id)
             } catch (e: RuntimeException) {
-                throw NotFoundException("Client not found")
+                throw NotFoundException("Client not found: $e")
             }
         } else {
             throw UnauthorizedException("Invalid token")
@@ -66,9 +65,7 @@ class ClientController {
     fun save(@RequestBody request: ClientRequest, @RequestHeader("Authorization") token: String) {
         if (tokenProvider.validateToken(token)) {
             val address = request.address
-            println(address)
             val id = addressService.findOne(address)
-            println(id)
             val client = Client(
                 request.lastName,
                 request.firstName,
@@ -78,11 +75,10 @@ class ClientController {
                 request.balance,
                 addressService.findById(id)
             )
-            println(client)
             try {
                 clientService.save(client)
             } catch (e: RuntimeException) {
-                throw BadRequestException("Error saving client")
+                throw BadRequestException("Error saving client: $e")
             }
         } else {
             throw UnauthorizedException("Invalid token")
@@ -109,7 +105,7 @@ class ClientController {
             try {
                 clientService.update(client)
             } catch (e: RuntimeException) {
-                throw NotFoundException("Client not found")
+                throw NotFoundException("Client not found: $e")
             }
         } else {
             throw UnauthorizedException("Invalid token")
@@ -122,7 +118,7 @@ class ClientController {
             try {
                 clientService.delete(id)
             } catch (e: RuntimeException) {
-                throw NotFoundException("Client not found")
+                throw NotFoundException("Client not found: $e")
             }
         } else {
             throw UnauthorizedException("Invalid token")

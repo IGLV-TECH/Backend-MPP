@@ -1,10 +1,7 @@
 package mpp.kotlin.backend.service
 
-import domain.Client
 import domain.Employee
 import mpp.kotlin.backend.repository.EmployeeRepository
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -12,46 +9,40 @@ import java.util.*
 class EmployeeService(
     private val employeeRepository: EmployeeRepository
 ) {
+    fun login(email: String, password: String): Employee? {
+        val employee = employeeRepository.findAll().find { e ->
+            e.getEmail() == email && e.getPassword() == password
+        }
+        return employee
+    }
+
     fun findAll(): MutableIterable<Employee> {
         return employeeRepository.findAll()
     }
 
     fun findById(id: Int): Employee {
         val optional: Optional<Employee> = employeeRepository.findById(id)
-        if (optional.isPresent) {
-            return optional.get()
-        } else {
-            throw RuntimeException("Employee not found")
-        }
+        return optional.orElseThrow { RuntimeException("Employee not found") }
     }
 
     fun save(employee: Employee) {
+        for (e in employeeRepository.findAll()) if (e.getEmail() == employee.getEmail()) {
+            throw RuntimeException("Email already used")
+        }
         employeeRepository.save(employee)
     }
 
     fun update(employee: Employee) {
+        if (!employeeRepository.existsById(employee.getId())) {
+            throw RuntimeException("Employee not found")
+        }
         employeeRepository.save(employee)
     }
 
     fun delete(id: Int) {
-        var employee = findById(id)
-        employeeRepository.delete(employee)
+        if (!employeeRepository.existsById(id)) {
+            throw RuntimeException("Employee not found")
+        }
+        employeeRepository.deleteById(id)
     }
-
-//    fun getAll(start: Int, count: Int): List<Employee> {
-//        val pageable: Pageable = PageRequest.of(start, count)
-//        return employeeRepository.findAllEmployees(pageable)
-//    }
-//
-//    fun add(employee: Employee){
-//        this.employeeRepository.save(employee)
-//    }
-//
-//    fun update(employee: Employee){
-//        this.employeeRepository.save(employee)
-//    }
-//
-//    fun deleteById(id: Int){
-//        this.employeeRepository.deleteById(id)
-//    }
 }

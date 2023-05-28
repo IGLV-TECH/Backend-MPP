@@ -5,3 +5,18 @@ Content-Type: application/json
 ###GET
 GET http://localhost:8080/invoices?start=0&count=2
 Content-Type: application/json
+
+###POST
+POST http://localhost:8080/invoices
+Content-Type: application/json
+
+{
+  "idClient": 5,
+  "idEmployee": 5,
+  "categoryType": "PLASTIC_AND_BOTTLE",
+  "penaltyPoints": 2,
+  "listItems": [
+    {"id": 6, "number": 5},
+    {"id": 7, "number": 3}
+  ]
+}

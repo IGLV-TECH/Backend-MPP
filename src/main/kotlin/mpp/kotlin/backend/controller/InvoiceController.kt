@@ -1,11 +1,14 @@
 package mpp.kotlin.backend.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import domain.*
 import mpp.kotlin.backend.service.ClientService
 import mpp.kotlin.backend.service.EmployeeService
 import mpp.kotlin.backend.service.InvoiceService
 import mpp.kotlin.backend.service.ItemsService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -28,13 +31,12 @@ class InvoiceController {
     @GetMapping()
     fun listAll(
         @RequestParam("start") start: Int, @RequestParam("count") count: Int
-    ): List<Invoice> {
+    ): ResponseEntity<String> {
         val all = invoiceService.findAll().toList()
-        for(i in all) {
-            println(i)
-        }
         val endIndex = (start + count).coerceAtMost(all.size)
-        return all.subList(start, endIndex)
+        val list = all.subList(start, endIndex).map { InvoiceResponse(it.getId(),it.getCategory(),it.getPayment(),it.getPenalty(),it.getDate().toString(),it.getClient(),it.getEmployee(),it.items) }
+        val jsonResponse = ObjectMapper().writeValueAsString(list)
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonResponse)
     }
 
 //    @GetMapping("/{id}/items")

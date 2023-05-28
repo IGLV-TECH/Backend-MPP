@@ -21,4 +21,12 @@ class Content(
     override fun toString(): String {
         return "Content(invoice=${invoice.getId()}, item=${item.getId()}, quantity=$quantity)"
     }
+
+    fun getItem(): Item {
+        return this.item
+    }
+
+    fun getQuantity(): Int {
+        return this.quantity
+    }
 }

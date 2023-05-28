@@ -1,8 +1,6 @@
 package mpp.kotlin.backend.controller
 
-import domain.Address
-import domain.CategoryType
-import jakarta.persistence.Column
+import domain.*
 
 data class InvoiceRequest(
     val idClient: Int,

@@ -40,7 +40,6 @@ class ClientController {
         @RequestParam("count") count: Int,
         @RequestHeader("Authorization") token: String
     ): List<Client> {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val all = clientService.findAll().toList()
             val endIndex = (start + count).coerceAtMost(all.size)
@@ -50,7 +49,6 @@ class ClientController {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Int, @RequestHeader("Authorization") token: String): Client {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             try {
                 return clientService.findById(id)
@@ -64,7 +62,6 @@ class ClientController {
 
     @PostMapping()
     fun save(@RequestBody request: ClientRequest, @RequestHeader("Authorization") token: String) {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val address = request.address
             val id = addressService.findOne(address)
@@ -89,7 +86,6 @@ class ClientController {
     fun update(
         @PathVariable id: Int, @RequestBody request: ClientRequest, @RequestHeader("Authorization") token: String
     ) {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val address = request.address
             val idAddress = addressService.findOne(address)
@@ -115,7 +111,6 @@ class ClientController {
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int, @RequestHeader("Authorization") token: String) {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             try {
                 clientService.delete(id)

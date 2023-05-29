@@ -8,18 +8,6 @@ class TokenProvider() {
 
     private val key: ByteArray = generateSecureSecretKey()
 
-//    private fun generateSecureSecretKey(): ByteArray {
-//        val secureRandom = SecureRandom()
-//        println("prim")
-//        println(secureRandom)
-//        val keyBytes = ByteArray(64)
-//        secureRandom.nextBytes(keyBytes)
-//        println("ceva")
-//        println(keyBytes.contentToString())
-//        //DA, GENEREAZA CHEIE DIF PT FIECARE CONTROLLER FMM
-//        return keyBytes
-//    }
-
     private fun generateSecureSecretKey(): ByteArray {
         return byteArrayOf(
             -22, -108, -41, 2, -117, -93, 125, -36, 82, -101, 57, 51, -25, 50, -43, -24,

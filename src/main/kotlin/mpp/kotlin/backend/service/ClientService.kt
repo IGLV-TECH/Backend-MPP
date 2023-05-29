@@ -1,6 +1,5 @@
 package mpp.kotlin.backend.service
 
-import domain.Address
 import domain.Client
 import mpp.kotlin.backend.repository.ClientRepository
 import org.springframework.stereotype.Service

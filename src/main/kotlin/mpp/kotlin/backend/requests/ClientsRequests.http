@@ -1,0 +1,64 @@
+###GET
+GET http://localhost:8080/clients/login
+Content-Type: application/json
+
+{
+  "email": "test1@mpp.com",
+  "password": "client1"
+}
+
+###GET
+GET http://localhost:8080/clients/1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjg1Mzg2NDUwLCJleHAiOjE2ODUzOTAwNTB9.m55UygEN1OuOD2ASYM8SSidXSuIso12BpVjbemHkdUBFRew41iZmokWwH5T7NKzBzR52aoWlDqOoAd-h7wVn0w
+
+###GET
+GET http://localhost:8080/clients?start=0&count=10
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg3MjEwLCJleHAiOjE2ODUzOTA4MTB9.SXEHvYACtJBumBKBNDaf3fZDwAVfDZwL7FuUMzC8JyqDGwk4kNPovQlxJ2Us-l9RC7OC6N_5ymjdtZ_wDh_Xdw
+
+###DELETE
+DELETE http://localhost:8080/clients/2
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
+
+###POST
+POST http://localhost:8080/clients
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
+
+{
+  "lastName": "POST",
+  "firstName": "POST",
+  "phoneNumber": "07noidoi",
+  "email": "post@testing.com",
+  "password": "admin",
+  "balance": 10,
+  "address": {
+    "county": "Test1",
+    "city": "Test1",
+    "street": "Test1",
+    "number": 6,
+    "ZIPCode": "123456"
+  }
+}
+
+###PUT
+PUT http://localhost:8080/clients/1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
+
+{
+  "lastName": "PUT",
+  "firstName": "PUT",
+  "phoneNumber": "07noidoi",
+  "email": "put@mpp.com",
+  "password": "admin",
+  "balance": 15.1,
+  "address": {
+    "county": "Test",
+    "city": "Test",
+    "street": "Test",
+    "number": 6,
+    "ZIPCode": "1234"
+  }
+}

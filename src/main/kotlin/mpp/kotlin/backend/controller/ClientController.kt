@@ -9,7 +9,6 @@ import mpp.kotlin.backend.service.AddressService
 import mpp.kotlin.backend.service.ClientService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
-import kotlin.math.log
 
 @RestController
 @CrossOrigin(origins = ["*"])
@@ -28,7 +27,7 @@ class ClientController {
     fun login(@RequestBody loginRequest: LoginRequest): Map<String, Any> {
         val client = clientService.login(loginRequest.email, loginRequest.password)
         return if (client != null) {
-            val token = tokenProvider.generateToken(loginRequest.email)
+            val token = tokenProvider.generateToken(loginRequest.email, "client")
             mapOf("token" to token, "client" to client)
         } else {
             throw UnauthorizedException("Invalid data")
@@ -41,7 +40,8 @@ class ClientController {
         @RequestParam("count") count: Int,
         @RequestHeader("Authorization") token: String
     ): List<Client> {
-        if (tokenProvider.validateToken(token)) {
+        println(tokenProvider.getRoleFromToken(token))
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val all = clientService.findAll().toList()
             val endIndex = (start + count).coerceAtMost(all.size)
             return all.subList(start, endIndex)
@@ -50,7 +50,8 @@ class ClientController {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Int, @RequestHeader("Authorization") token: String): Client {
-        if (tokenProvider.validateToken(token)) {
+        println(tokenProvider.getRoleFromToken(token))
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             try {
                 return clientService.findById(id)
             } catch (e: RuntimeException) {
@@ -63,7 +64,8 @@ class ClientController {
 
     @PostMapping()
     fun save(@RequestBody request: ClientRequest, @RequestHeader("Authorization") token: String) {
-        if (tokenProvider.validateToken(token)) {
+        println(tokenProvider.getRoleFromToken(token))
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val address = request.address
             val id = addressService.findOne(address)
             val client = Client(
@@ -80,16 +82,15 @@ class ClientController {
             } catch (e: RuntimeException) {
                 throw BadRequestException("Error saving client: $e")
             }
-        } else {
-            throw UnauthorizedException("Invalid token")
-        }
+        } else throw UnauthorizedException("Invalid token")
     }
 
     @PutMapping("/{id}")
     fun update(
         @PathVariable id: Int, @RequestBody request: ClientRequest, @RequestHeader("Authorization") token: String
     ) {
-        if (tokenProvider.validateToken(token)) {
+        println(tokenProvider.getRoleFromToken(token))
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val address = request.address
             val idAddress = addressService.findOne(address)
             val client = Client(
@@ -114,7 +115,8 @@ class ClientController {
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int, @RequestHeader("Authorization") token: String) {
-        if (tokenProvider.validateToken(token)) {
+        println(tokenProvider.getRoleFromToken(token))
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             try {
                 clientService.delete(id)
             } catch (e: RuntimeException) {

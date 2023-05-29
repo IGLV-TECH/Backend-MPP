@@ -19,7 +19,7 @@ class AdminController {
     fun login(@RequestBody loginRequest: LoginRequest): Map<String, Any> {
         val admin = adminService.login(loginRequest.email, loginRequest.password)
         return if (admin != null) {
-            val token = tokenProvider.generateToken(loginRequest.email)
+            val token = tokenProvider.generateToken(loginRequest.email, "admin")
             mapOf("token" to token, "admin" to admin)
         } else {
             throw UnauthorizedException("Invalid data")

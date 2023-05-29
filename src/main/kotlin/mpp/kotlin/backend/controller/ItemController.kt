@@ -1,5 +1,7 @@
 package mpp.kotlin.backend.controller
 
+import TokenProvider
+import UnauthorizedException
 import domain.CategoryType
 import domain.Item
 import mpp.kotlin.backend.service.ItemsService
@@ -14,13 +16,14 @@ class ItemController {
     @Autowired
     private lateinit var itemsService: ItemsService
 
-    @GetMapping()
-    fun listAll(): MutableIterable<Item> {
-        return itemsService.findAll()
-    }
+    private val tokenProvider: TokenProvider = TokenProvider()
 
     @GetMapping("/findAllByCategory")
-    fun findAllByCategory(@RequestParam categoryType: CategoryType): ArrayList<Map<String, String>> {
-        return itemsService.findAllByCategory(categoryType)
+    fun findAllByCategory(
+        @RequestParam categoryType: CategoryType, @RequestHeader("Authorization") token: String
+    ): ArrayList<Map<String, String>> {
+        println(tokenProvider.getRoleFromToken(token))
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "employee") return itemsService.findAllByCategory(categoryType)
+        else throw UnauthorizedException("Invalid token")
     }
 }

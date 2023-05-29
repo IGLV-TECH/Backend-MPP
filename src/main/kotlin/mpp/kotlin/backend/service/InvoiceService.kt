@@ -17,22 +17,6 @@ class InvoiceService(
         return invoiceRepository.findAll()
     }
 
-    fun getItems(id: Int): MutableIterable<Content> {
-        val optional = invoiceRepository.findById(id)
-        return if (optional.isPresent) {
-            val invoice = optional.get()
-            return invoice.items
-        } else {
-            throw RuntimeException("Invoice not found")
-        }
-    }
-
-//    fun getAll(start: Int, count: Int): List<Invoice> {
-//        val pageable: Pageable = PageRequest.of(start, count)
-//        return invoiceRepository.findAllInvoices(pageable)
-//    }
-
-
     fun addInvoice(
         client: Client, employee: Employee, categoryType: CategoryType, penaltyPoints: Int, listItems: Map<Item, Int>
     ) {

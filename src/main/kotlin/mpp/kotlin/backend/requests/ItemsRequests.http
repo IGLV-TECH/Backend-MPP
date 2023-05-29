@@ -1,0 +1,4 @@
+###GET
+GET http://localhost:8080/items/findAllByCategory?categoryType=PLASTIC_AND_BOTTLE
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjg1Mzg2NDUwLCJleHAiOjE2ODUzOTAwNTB9.m55UygEN1OuOD2ASYM8SSidXSuIso12BpVjbemHkdUBFRew41iZmokWwH5T7NKzBzR52aoWlDqOoAd-h7wVn0w

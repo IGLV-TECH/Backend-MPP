@@ -1,0 +1,8 @@
+###GET
+GET http://localhost:8080/admins/login
+Content-Type: application/json
+
+{
+  "email": "test1@mpp.com",
+  "password": "admin1"
+}

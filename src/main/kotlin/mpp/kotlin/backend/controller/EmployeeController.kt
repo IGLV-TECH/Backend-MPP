@@ -40,7 +40,6 @@ class EmployeeController {
         @RequestParam("count") count: Int,
         @RequestHeader("Authorization") token: String
     ): List<Employee> {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token)) {
             val all = employeeService.findAll().toList()
             val endIndex = (start + count).coerceAtMost(all.size)
@@ -50,7 +49,6 @@ class EmployeeController {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Int, @RequestHeader("Authorization") token: String): Employee {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             try {
                 return employeeService.findById(id)
@@ -64,7 +62,6 @@ class EmployeeController {
 
     @PostMapping()
     fun save(@RequestBody request: EmployeeRequest, @RequestHeader("Authorization") token: String) {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val address = request.address
             val id = addressService.findOne(address)
@@ -90,7 +87,6 @@ class EmployeeController {
     fun update(
         @PathVariable id: Int, @RequestBody request: EmployeeRequest, @RequestHeader("Authorization") token: String
     ) {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             val address = request.address
             val idAddress = addressService.findOne(address)
@@ -115,7 +111,6 @@ class EmployeeController {
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Int, @RequestHeader("Authorization") token: String) {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
             try {
                 employeeService.delete(id)

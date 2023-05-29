@@ -39,7 +39,6 @@ class InvoiceController {
         @RequestParam("count") count: Int,
         @RequestHeader("Authorization") token: String
     ): List<Invoice> {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && (tokenProvider.getRoleFromToken(token) == "client" || tokenProvider.getRoleFromToken(token) == "admin")
         ) {
             val all = invoiceService.findAll().toList()
@@ -50,7 +49,6 @@ class InvoiceController {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Int, @RequestHeader("Authorization") token: String): Invoice {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && (tokenProvider.getRoleFromToken(token) == "client" || tokenProvider.getRoleFromToken(token) == "admin")
         ) try {
             return invoiceService.findById(id)
@@ -63,7 +61,6 @@ class InvoiceController {
 
     @PostMapping()
     fun save(@RequestBody request: InvoiceRequest, @RequestHeader("Authorization") token: String) {
-        println(tokenProvider.getRoleFromToken(token))
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "employee") {
             try {
                 val client = clientService.findById(request.idClient)

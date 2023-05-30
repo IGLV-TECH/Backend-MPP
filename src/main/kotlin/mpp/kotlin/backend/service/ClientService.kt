@@ -9,55 +9,49 @@ import java.util.*
 class ClientService(
     private val clientRepository: ClientRepository
 ) {
+    fun login(email: String, password: String): Client? {
+        val client = clientRepository.findAll().find { c ->
+            c.getEmail() == email && c.getPassword() == password
+        }
+        return client
+    }
+
     fun findAll(): MutableIterable<Client> {
         return clientRepository.findAll()
     }
 
     fun findById(id: Int): Client {
         val optional: Optional<Client> = clientRepository.findById(id)
-        if (optional.isPresent) {
-            return optional.get()
-        } else {
-            throw RuntimeException("Client not found")
-        }
+        return optional.orElseThrow { RuntimeException("Client not found") }
     }
 
     fun save(client: Client) {
+        for (c in clientRepository.findAll()) if (c.getEmail() == client.getEmail()) {
+            throw RuntimeException("Email already used")
+        }
         clientRepository.save(client)
     }
 
     fun update(client: Client) {
+        if (!clientRepository.existsById(client.getId())) {
+            throw RuntimeException("Client not found")
+        }
         clientRepository.save(client)
     }
 
     fun delete(id: Int) {
-        var client = findById(id)
-        clientRepository.delete(client)
+        if (!clientRepository.existsById(id)) {
+            throw RuntimeException("Client not found")
+        }
+        clientRepository.deleteById(id)
     }
 
-//    fun getAll(start: Int, count: Int): List<Client> {
-//        val pageable: Pageable = PageRequest.of(start, count)
-//        return clientRepository.findAllClients(pageable)
-//    }
-//
-//    fun add(client: Client){
-//        this.clientRepository.save(client)
-//    }
-//
-//    fun update(client: Client){
-//        this.clientRepository.save(client)
-//    }
-//
-//    fun deleteById(id: Int){
-//        this.clientRepository.deleteById(id)
-//    }
-//
     /**
      * Add amount to the balance of the client with clientId
      * @param amount: negative/positive/==0 float value
      * @param clientId: int
      */
-    fun addToBalance(amount: Float, clientId: Int){
+    fun addToBalance(amount: Float, clientId: Int) {
         var client = this.findById(clientId);
         client.setBalance(client.getBalance() + amount)
         this.clientRepository.save(client)

@@ -1,5 +1,9 @@
 package mpp.kotlin.backend.controller
 
+import NotFoundException
+import TokenProvider
+import UnauthorizedException
+import BadRequestException
 import domain.Client
 import mpp.kotlin.backend.service.AddressService
 import mpp.kotlin.backend.service.ClientService
@@ -17,80 +21,104 @@ class ClientController {
     @Autowired
     private lateinit var addressService: AddressService
 
+    private val tokenProvider: TokenProvider = TokenProvider()
+
+    @GetMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): Map<String, Any> {
+        val client = clientService.login(loginRequest.email, loginRequest.password)
+        return if (client != null) {
+            val token = tokenProvider.generateToken(loginRequest.email, "client")
+            mapOf("token" to token, "client" to client)
+        } else {
+            throw UnauthorizedException("Invalid data")
+        }
+    }
+
     @GetMapping()
     fun listAll(
-        @RequestParam("start") start: Int, @RequestParam("count") count: Int
+        @RequestParam("start") start: Int,
+        @RequestParam("count") count: Int,
+        @RequestHeader("Authorization") token: String
     ): List<Client> {
-        val all = clientService.findAll().toList()
-        val endIndex = (start + count).coerceAtMost(all.size)
-        return all.subList(start, endIndex)
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            val all = clientService.findAll().toList()
+            val endIndex = (start + count).coerceAtMost(all.size)
+            return all.subList(start, endIndex)
+        } else throw UnauthorizedException("Invalid token")
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): Client {
-        return clientService.findById(id)
+    fun findById(@PathVariable id: Int, @RequestHeader("Authorization") token: String): Client {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            try {
+                return clientService.findById(id)
+            } catch (e: RuntimeException) {
+                throw NotFoundException("Client not found: $e")
+            }
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
 
     @PostMapping()
-    fun save(@RequestBody request: ClientRequest) {
-        val address = request.address
-        val id = addressService.findOne(address)
-        var client = Client(
-            request.lastName,
-            request.firstName,
-            request.phoneNumber,
-            request.email,
-            request.password,
-            request.balance,
-            addressService.findById(id)
-        )
-        clientService.save(client)
+    fun save(@RequestBody request: ClientRequest, @RequestHeader("Authorization") token: String) {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            val address = request.address
+            val id = addressService.findOne(address)
+            val client = Client(
+                request.lastName,
+                request.firstName,
+                request.phoneNumber,
+                request.email,
+                request.password,
+                request.balance,
+                addressService.findById(id)
+            )
+            try {
+                clientService.save(client)
+            } catch (e: RuntimeException) {
+                throw BadRequestException("Error saving client: $e")
+            }
+        } else throw UnauthorizedException("Invalid token")
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody request: ClientRequest) {
-        val address = request.address
-        val idAddress = addressService.findOne(address)
-        var client = Client(
-            request.lastName,
-            request.firstName,
-            request.phoneNumber,
-            request.email,
-            request.password,
-            request.balance,
-            addressService.findById(idAddress)
-        )
-        client.setId(id)
-        clientService.update(client)
+    fun update(
+        @PathVariable id: Int, @RequestBody request: ClientRequest, @RequestHeader("Authorization") token: String
+    ) {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            val address = request.address
+            val idAddress = addressService.findOne(address)
+            val client = Client(
+                request.lastName,
+                request.firstName,
+                request.phoneNumber,
+                request.email,
+                request.password,
+                request.balance,
+                addressService.findById(idAddress)
+            )
+            client.setId(id)
+            try {
+                clientService.update(client)
+            } catch (e: RuntimeException) {
+                throw NotFoundException("Client not found: $e")
+            }
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int) {
-        clientService.delete(id);
-
-//    @GetMapping("")
-//    fun getClients(
-//        @RequestParam("start", defaultValue = "0") start: Int,
-//        @RequestParam("count", defaultValue = "5") count: Int
-//    ): List<Client> {
-//        return this.clientService.getAll(start, count)
-//    }
-
-//    @PostMapping("")
-//    fun addClient(@RequestBody client: Client): ResponseEntity<*> {
-//        this.clientService.add(client)
-//        return ResponseEntity.ok().build<Any>()
-//    }
-
-//    @PutMapping("/{id}")
-//    fun updateClient(@PathVariable id: Int, @RequestBody client: Client): ResponseEntity<*> {
-//        this.clientService.update(client)
-//        return ResponseEntity.ok().build<Any>()
-//    }
-
-//    @DeleteMapping("/{id}")
-//    fun deleteOne(@PathVariable id: Int): ResponseEntity<*> {
-//        this.clientService.deleteById(id)
-//        return ResponseEntity.ok().build<Any>()
+    fun delete(@PathVariable id: Int, @RequestHeader("Authorization") token: String) {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            try {
+                clientService.delete(id)
+            } catch (e: RuntimeException) {
+                throw NotFoundException("Client not found: $e")
+            }
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
 }

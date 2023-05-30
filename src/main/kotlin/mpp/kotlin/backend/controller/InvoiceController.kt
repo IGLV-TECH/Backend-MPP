@@ -1,5 +1,8 @@
 package mpp.kotlin.backend.controller
 
+import NotFoundException
+import TokenProvider
+import UnauthorizedException
 import com.fasterxml.jackson.databind.ObjectMapper
 import domain.*
 import mpp.kotlin.backend.service.ClientService
@@ -28,42 +31,52 @@ class InvoiceController {
     @Autowired
     private lateinit var itemsService: ItemsService
 
+    private val tokenProvider: TokenProvider = TokenProvider()
+
     @GetMapping()
     fun listAll(
-        @RequestParam("start") start: Int, @RequestParam("count") count: Int
+        @RequestParam("start") start: Int,
+        @RequestParam("count") count: Int,
+        @RequestHeader("Authorization") token: String
     ): List<Invoice> {
-        val all = invoiceService.findAll().toList()
-        val endIndex = (start + count).coerceAtMost(all.size)
-        return all.subList(start, endIndex)
+        if (tokenProvider.validateToken(token) && (tokenProvider.getRoleFromToken(token) == "client" || tokenProvider.getRoleFromToken(token) == "admin")
+        ) {
+            val all = invoiceService.findAll().toList()
+            val endIndex = (start + count).coerceAtMost(all.size)
+            return all.subList(start, endIndex)
+        } else throw UnauthorizedException("Invalid token")
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): Invoice {
-        return invoiceService.findById(id)
+    fun findById(@PathVariable id: Int, @RequestHeader("Authorization") token: String): Invoice {
+        if (tokenProvider.validateToken(token) && (tokenProvider.getRoleFromToken(token) == "client" || tokenProvider.getRoleFromToken(token) == "admin")
+        ) try {
+            return invoiceService.findById(id)
+        } catch (e: RuntimeException) {
+            throw NotFoundException("Client not found: $e")
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
 
-//    @GetMapping("")
-//    fun getInvoices(
-//        @RequestParam("start", defaultValue = "0") start: Int,
-//        @RequestParam("count", defaultValue = "5") count: Int
-//    ): List<Invoice> {
-//        return this.invoiceService.getAll(start, count)
-//    }
-
     @PostMapping()
-    fun save(@RequestBody request: InvoiceRequest) {
-        val client = clientService.findById(request.idClient)
-        println(client)
-        val employee = employeeService.findById(request.idEmployee)
-        println(employee)
-        val list = mutableMapOf<Item, Int>()
-        for (itemMap in request.listItems) {
-            val id = itemMap["id"]!!
-            val item = itemsService.findById(id)
-            println(item)
-            val number = itemMap["number"]!!
-            list[item] = number
-        }
-        invoiceService.addInvoice(client, employee, request.categoryType, request.penaltyPoints, list)
+    fun save(@RequestBody request: InvoiceRequest, @RequestHeader("Authorization") token: String) {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "employee") {
+            try {
+                val client = clientService.findById(request.idClient)
+                val employee = employeeService.findById(request.idEmployee)
+                val list = mutableMapOf<Item, Int>()
+                for (itemMap in request.listItems) {
+                    val id = itemMap["id"]!!
+                    val item = itemsService.findById(id)
+                    println(item)
+                    val number = itemMap["number"]!!
+                    list[item] = number
+                }
+                invoiceService.addInvoice(client, employee, request.categoryType, request.penaltyPoints, list)
+            } catch (e: RuntimeException) {
+                throw NotFoundException("Error: $e")
+            }
+        } else throw UnauthorizedException("Invalid token")
     }
 }

@@ -1,5 +1,9 @@
 package mpp.kotlin.backend.controller
 
+import BadRequestException
+import NotFoundException
+import TokenProvider
+import UnauthorizedException
 import domain.Employee
 import mpp.kotlin.backend.service.AddressService
 import mpp.kotlin.backend.service.EmployeeService
@@ -17,79 +21,104 @@ class EmployeeController {
     @Autowired
     private lateinit var addressService: AddressService
 
+    private val tokenProvider: TokenProvider = TokenProvider()
+
+    @GetMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): Map<String, Any> {
+        val employee = employeeService.login(loginRequest.email, loginRequest.password)
+        return if (employee != null) {
+            val token = tokenProvider.generateToken(loginRequest.email, "employee")
+            mapOf("token" to token, "employee" to employee)
+        } else {
+            throw UnauthorizedException("Invalid data")
+        }
+    }
+
     @GetMapping()
     fun listAll(
-        @RequestParam("start") start: Int, @RequestParam("count") count: Int
+        @RequestParam("start") start: Int,
+        @RequestParam("count") count: Int,
+        @RequestHeader("Authorization") token: String
     ): List<Employee> {
-        val all = employeeService.findAll().toList()
-        val endIndex = (start + count).coerceAtMost(all.size)
-        return all.subList(start, endIndex)
+        if (tokenProvider.validateToken(token)) {
+            val all = employeeService.findAll().toList()
+            val endIndex = (start + count).coerceAtMost(all.size)
+            return all.subList(start, endIndex)
+        } else throw UnauthorizedException("Invalid token")
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Int): Employee {
-        return employeeService.findById(id)
+    fun findById(@PathVariable id: Int, @RequestHeader("Authorization") token: String): Employee {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            try {
+                return employeeService.findById(id)
+            } catch (e: RuntimeException) {
+                throw NotFoundException("Employee not found")
+            }
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
 
     @PostMapping()
-    fun save(@RequestBody request: EmployeeRequest) {
-        val address = request.address
-        val id = addressService.findOne(address)
-        var employee = Employee(
-            request.lastName,
-            request.firstName,
-            request.phoneNumber,
-            request.email,
-            request.password,
-            addressService.findById(id)
-        )
-        employeeService.save(employee)
+    fun save(@RequestBody request: EmployeeRequest, @RequestHeader("Authorization") token: String) {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            val address = request.address
+            val id = addressService.findOne(address)
+            var employee = Employee(
+                request.lastName,
+                request.firstName,
+                request.phoneNumber,
+                request.email,
+                request.password,
+                addressService.findById(id)
+            )
+            try {
+                employeeService.save(employee)
+            } catch (e: RuntimeException) {
+                throw BadRequestException("Error saving client: $e")
+            }
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Int, @RequestBody request: EmployeeRequest) {
-        val address = request.address
-        val idAddress = addressService.findOne(address)
-        var employee = Employee(
-            request.lastName,
-            request.firstName,
-            request.phoneNumber,
-            request.email,
-            request.password,
-            addressService.findById(idAddress)
-        )
-        employee.setId(id)
-        employeeService.update(employee)
+    fun update(
+        @PathVariable id: Int, @RequestBody request: EmployeeRequest, @RequestHeader("Authorization") token: String
+    ) {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            val address = request.address
+            val idAddress = addressService.findOne(address)
+            var employee = Employee(
+                request.lastName,
+                request.firstName,
+                request.phoneNumber,
+                request.email,
+                request.password,
+                addressService.findById(idAddress)
+            )
+            employee.setId(id)
+            try {
+                employeeService.update(employee)
+            } catch (e: RuntimeException) {
+                throw NotFoundException("Employee not found: $e")
+            }
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Int) {
-        employeeService.delete(id);
+    fun delete(@PathVariable id: Int, @RequestHeader("Authorization") token: String) {
+        if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
+            try {
+                employeeService.delete(id)
+            } catch (e: RuntimeException) {
+                throw NotFoundException("Employee not found: $e")
+            }
+        } else {
+            throw UnauthorizedException("Invalid token")
+        }
     }
-
-//    @GetMapping("")
-//    fun getEmployees(
-//        @RequestParam("start", defaultValue = "0") start: Int,
-//        @RequestParam("count", defaultValue = "5") count: Int
-//    ): List<Employee> {
-//        return this.employeeService.getAll(start, count)
-//    }
-//
-//    @PostMapping("")
-//    fun addClient(@RequestBody employee: Employee): ResponseEntity<*> {
-//        this.employeeService.add(employee)
-//        return ResponseEntity.ok().build<Any>()
-//    }
-//
-//    @PutMapping("/{id}")
-//    fun updateClient(@PathVariable id: Int, @RequestBody employee: Employee): ResponseEntity<*> {
-//        this.employeeService.update(employee)
-//        return ResponseEntity.ok().build<Any>()
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    fun deleteOne(@PathVariable id: Int): ResponseEntity<*> {
-//        this.employeeService.deleteById(id)
-//        return ResponseEntity.ok().build<Any>()
-//    }
 }

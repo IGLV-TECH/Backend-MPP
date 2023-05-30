@@ -12,81 +12,95 @@
 
 ## ENDPOINT-URI
 
-- **Address**
-    - `lisAll`: GET http://localhost:8080/addresses
-- **Admin**
-    - `listAll`: GET http://localhost:8080/admins
 - **Client**
     - `list`: GET http://localhost:8080/clients?start=0&count=3
+      - auth by **ADMIN**
     - `findById`: GET http://localhost:8080/clients/id
-    - `save`: POST http://localhost:8080/clients {
-        - "lastName":
-        - "firstName":
-        - "phoneNumber":
-        - "email":
-        - "password":
-        - "balance":
-        - "address": {
-          - "county":
-          - "city":
-          - "street":
-          - "number":
-          - "ZIPCode": }
-    - `update`: PUT http://localhost:8080/clients/id {
-        - "id":
-        - "lastName":
-        - "firstName":
-        - "phoneNumber":
-        - "email":
-        - "password":
-        - "balance":
-        - "address": {
-          - "county":
-          - "city":
-          - "street":
-          - "number":
-          - "ZIPCode": }
+      - auth by **ADMIN**
+    - `save`
+      - auth by **ADMIN**
+      - : POST http://localhost:8080/clients {
+          - "lastName":
+          - "firstName":
+          - "phoneNumber":
+          - "email":
+          - "password":
+          - "balance":
+          - "address": {
+            - "county":
+            - "city":
+            - "street":
+            - "number":
+            - "ZIPCode": }
+    - `update`
+      - auth by **ADMIN**
+      - : PUT http://localhost:8080/clients/id {
+          - "id":
+          - "lastName":
+          - "firstName":
+          - "phoneNumber":
+          - "email":
+          - "password":
+          - "balance":
+          - "address": {
+            - "county":
+            - "city":
+            - "street":
+            - "number":
+            - "ZIPCode": }
     - `delete`: DELETE http://localhost:8080/clients/id
+      - auth by **ADMIN**
 - **Employee**
     - `list`: GET http://localhost:8080/employees?start=0&count=3
+      - auth by **ADMIN**
     - `findById`: GET http://localhost:8080/employees/id
-    - `save`: POST http://localhost:8080/employees {
-        - "lastName":
-        - "firstName":
-        - "phoneNumber":
-        - "email":
-        - "password":
-        - "address": {
-          - "county":
-          - "city":
-          - "street":
-          - "number":
-          - "ZIPCode": }
-    - `update`: PUT http://localhost:8080/employees/id {
-        - "id":
-        - "lastName":
-        - "firstName":
-        - "phoneNumber":
-        - "email":
-        - "password":
-        - "address": {
-          - "county":
-          - "city":
-          - "street":
-          - "number":
-          - "ZIPCode": }
+      - auth by **ADMIN**
+    - `save`
+      - auth by **ADMIN**
+      - : POST http://localhost:8080/employees {
+          - "lastName":
+          - "firstName":
+          - "phoneNumber":
+          - "email":
+          - "password":
+          - "address": {
+            - "county":
+            - "city":
+            - "street":
+            - "number":
+            - "ZIPCode": }
+    - `update`
+      - auth by **ADMIN**
+      - : PUT http://localhost:8080/employees/id {
+          - "id":
+          - "lastName":
+          - "firstName":
+          - "phoneNumber":
+          - "email":
+          - "password":
+          - "address": {
+            - "county":
+            - "city":
+            - "street":
+            - "number":
+            - "ZIPCode": }
     - `delete`: DELETE http://localhost:8080/employees/id
+      - auth by **ADMIN**
 - **Invoice**
     - `list`: GET http://localhost:8080/invoices?start=0&count=3
+      - auth by **ADMIN** and **CLIENT**
     - `findById`: GET http://localhost:8080/invoices/id
-    - `save`: POST http://localhost:8080/invoices {
-        - "idClient":
-        - "idEmployee":
-        - "categoryType":
-        - "penaltyPoints":
-        - "listItems": [
-            - {"id": , "number": },
-            - {"id": , "number": } ] }
+      - auth by **ADMIN** and **CLIENT**
+    - `save`
+      - auth by **EMPLOYEE**
+      - : POST http://localhost:8080/invoices {
+          - "idClient":
+          - "idEmployee":
+          - "categoryType":
+          - "penaltyPoints":
+          - "listItems": [
+              - {"id": , "number": },
+              - {"id": , "number": } ] }
 - **Item**
-    - `listAll`: GET http://localhost:8080/items
-    - `findAllByCategory`: GET GET http://localhost:8080/items/findAllByCategory?categoryType=
+    - `findAllByCategory`: GET http://localhost:8080/items/findAllByCategory?categoryType=
+      - auth by **EMPLOYEE**

@@ -1,4 +1,4 @@
-###GET
+###LOGIN
 GET http://localhost:8080/employees/login
 Content-Type: application/json
 
@@ -7,12 +7,17 @@ Content-Type: application/json
   "password": "employee1"
 }
 
-###GET
+###LOGOUT
+POST http://localhost:8080/employees/logout
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjg1Nzg5ODQ2LCJleHAiOjE2ODU3OTM0NDZ9.cFy14ejmsRTMeUGnfgLBOT62DugpNWcYhff_evRWuFNANroXcXgeN-Y0HzsLiRBCDAwpio8nUOi7SqMru_VZlQ
+
+###FIND BY ID
 GET http://localhost:8080/employees/1
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
 
-###GET
+###LIST ALL
 GET http://localhost:8080/employees?start=0&count=10
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
@@ -21,10 +26,10 @@ Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFk
 DELETE http://localhost:8080/employees/2
 Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
 
-###POST
+###ADD
 POST http://localhost:8080/employees
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjg1NzkxNzE4LCJleHAiOjE2ODU3OTUzMTh9.kJwNNKhyGKJOwahTnsuvb_B3xA_tBNVnEFkjTaVb4qwxtpRCu51BtbDYacmpSxdSOXyu1jobr46TAfaYQINF8w
 
 {
   "lastName": "POST",
@@ -41,7 +46,7 @@ Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFk
   }
 }
 
-###PUT
+###UPDATE
 PUT http://localhost:8080/employees/1
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q

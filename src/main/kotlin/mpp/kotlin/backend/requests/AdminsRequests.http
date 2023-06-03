@@ -1,4 +1,4 @@
-###GET
+###LOGIN
 GET http://localhost:8080/admins/login
 Content-Type: application/json
 
@@ -6,3 +6,8 @@ Content-Type: application/json
   "email": "test1@mpp.com",
   "password": "admin1"
 }
+
+###LOGOUT
+POST http://localhost:8080/admins/logout
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Nzg5NzcxLCJleHAiOjE2ODU3OTMzNzF9.gvD_s9d7GLatY52aSwhI1iuR0WwS3Kc0a-uXm7tqwxIiiXJgr2sZva8GjoEHOcUTxco2TR-NZuDxDsdsZChxlQ

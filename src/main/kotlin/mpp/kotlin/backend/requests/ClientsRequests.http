@@ -1,30 +1,40 @@
-###GET
+###LOGIN
 GET http://localhost:8080/clients/login
 Content-Type: application/json
 
 {
-  "email": "test1@mpp.com",
-  "password": "client1"
+  "email": "test3@mpp.com",
+  "password": "client3"
 }
 
-###GET
-GET http://localhost:8080/clients/1
+###LOGOUT
+POST http://localhost:8080/clients/logout
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjg1Mzg2NDUwLCJleHAiOjE2ODUzOTAwNTB9.m55UygEN1OuOD2ASYM8SSidXSuIso12BpVjbemHkdUBFRew41iZmokWwH5T7NKzBzR52aoWlDqOoAd-h7wVn0w
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0M0BtcHAuY29tIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY4NTc4OTc5MiwiZXhwIjoxNjg1NzkzMzkyfQ.DqiwuVLEBSSc2cdsrIOOTwzX-eA5j_8NprztUP5JDFpFL25U5p3DE26mKbUcqrLUBKYB6gv-_aTddI-5IATX3A
 
-###GET
+###WITHDRAW
+PUT http://localhost:8080/clients/3/withdraw?amount=5.5
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0M0BtcHAuY29tIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY4NTc4OTc5MiwiZXhwIjoxNjg1NzkzMzkyfQ.DqiwuVLEBSSc2cdsrIOOTwzX-eA5j_8NprztUP5JDFpFL25U5p3DE26mKbUcqrLUBKYB6gv-_aTddI-5IATX3A
+
+###FIND BY ID
+GET http://localhost:8080/clients/3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Nzg5NzcxLCJleHAiOjE2ODU3OTMzNzF9.gvD_s9d7GLatY52aSwhI1iuR0WwS3Kc0a-uXm7tqwxIiiXJgr2sZva8GjoEHOcUTxco2TR-NZuDxDsdsZChxlQ
+
+###LIST ALL
 GET http://localhost:8080/clients?start=0&count=10
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg3MjEwLCJleHAiOjE2ODUzOTA4MTB9.SXEHvYACtJBumBKBNDaf3fZDwAVfDZwL7FuUMzC8JyqDGwk4kNPovQlxJ2Us-l9RC7OC6N_5ymjdtZ_wDh_Xdw
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0M0BtcHAuY29tIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY4NTc4OTc5MiwiZXhwIjoxNjg1NzkzMzkyfQ.DqiwuVLEBSSc2cdsrIOOTwzX-eA5j_8NprztUP5JDFpFL25U5p3DE26mKbUcqrLUBKYB6gv-_aTddI-5IATX3A
 
 ###DELETE
 DELETE http://localhost:8080/clients/2
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1NzIwODE1LCJleHAiOjE2ODU3MjQ0MTV9.IrCWtdHMRlayWgpNmSnOU5_HPay4Sijyrimkg0ghD1Rvy_YEw-FpHncKSejvfMNY-jUndh4gILmMHTvIdRlwBg
 
-###POST
+###ADD
 POST http://localhost:8080/clients
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1NzIwODE1LCJleHAiOjE2ODU3MjQ0MTV9.IrCWtdHMRlayWgpNmSnOU5_HPay4Sijyrimkg0ghD1Rvy_YEw-FpHncKSejvfMNY-jUndh4gILmMHTvIdRlwBg
 
 {
   "lastName": "POST",
@@ -42,10 +52,10 @@ Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFk
   }
 }
 
-###PUT
+###UPDATE
 PUT http://localhost:8080/clients/1
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1Mzg2NDc4LCJleHAiOjE2ODUzOTAwNzh9.1-HpTeS0PFE5-RpBq-TqjCxrSLzTxJAlLzzgxocl7s8V8-ADr-YtbDYdWPxmBVrcnoMaMULs8GA2Nn1brkTI8Q
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1NzIwODE1LCJleHAiOjE2ODU3MjQ0MTV9.IrCWtdHMRlayWgpNmSnOU5_HPay4Sijyrimkg0ghD1Rvy_YEw-FpHncKSejvfMNY-jUndh4gILmMHTvIdRlwBg
 
 {
   "lastName": "PUT",

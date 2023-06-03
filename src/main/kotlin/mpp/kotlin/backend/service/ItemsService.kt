@@ -6,16 +6,21 @@ import mpp.kotlin.backend.repository.ItemRepository
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.collections.ArrayList
+import mu.KotlinLogging
 
 @Service
 class ItemsService(
     val itemRepository: ItemRepository
 ) {
+    private val logger = KotlinLogging.logger {}
+
     fun findAll(): MutableIterable<Item> {
+        logger.info { "Retrieving all items" }
         return itemRepository.findAll()
     }
 
     fun findAllByCategory(categoryType: CategoryType): ArrayList<Map<String, String>> {
+        logger.info { "Retrieving items by category: $categoryType" }
         var list = ArrayList<Map<String, String>>()
         for (item: Item in itemRepository.findAllByCategory(categoryType)) {
             var element = mutableMapOf<String, String>()
@@ -27,6 +32,7 @@ class ItemsService(
     }
 
     fun findById(id: Int): Item {
+        logger.info { "Retrieving item by ID: $id" }
         val optionalClient: Optional<Item> = itemRepository.findById(id)
         if (optionalClient.isPresent) {
             return optionalClient.get()

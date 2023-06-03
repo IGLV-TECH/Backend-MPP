@@ -1,14 +1,14 @@
-###GET
+###FIND BY ID
 GET http://localhost:8080/invoices/1
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY4NTM4NjQzMywiZXhwIjoxNjg1MzkwMDMzfQ.PtBRK97pHcsGlehd2riOBXnDSTwzbK8eAYOge0BIL-Y8EuvSBz3wFgF-YiWQQvfqt0z6urbkmn-79_8WfQaw3g
 
-###GET
+###LIST ALL
 GET http://localhost:8080/invoices?start=0&count=2
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY4NTM4NzI0OCwiZXhwIjoxNjg1MzkwODQ4fQ.qwXSbyogLwrdRoxcQjcLcMZyc_j6R6JZA7A8VTaF2bvV-N3ENatOts6ZDsat-bTsu8BGPwCDclBLbCTqjUvIRA
 
-###POST
+###ADD
 POST http://localhost:8080/invoices
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNjg1Mzg3MjgyLCJleHAiOjE2ODUzOTA4ODJ9.nGmlOfbZOo7UrB_mP6j7rtoSYktHjhdhqlf7RxmGSqFEkK_vLF5RStZ1bGCnj_udEe5Vhsgyg_75mFSnbMXQHg

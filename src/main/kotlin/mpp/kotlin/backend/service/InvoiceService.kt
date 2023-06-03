@@ -1,6 +1,7 @@
 package mpp.kotlin.backend.service
 
 import domain.*
+import mpp.kotlin.backend.repository.ClientRepository
 import mpp.kotlin.backend.repository.InvoiceRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -9,7 +10,7 @@ import mu.KotlinLogging
 
 @Service
 class InvoiceService(
-    val invoiceRepository: InvoiceRepository,
+    val invoiceRepository: InvoiceRepository, val clientRepository: ClientRepository
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -49,6 +50,7 @@ class InvoiceService(
         invoiceRepository.save(savedInvoice)
 
         client.setBalance(client.getBalance() + payment)
+        clientRepository.save(client)
         logger.info { "Invoice added successfully for client: ${client.getFirstName()} ${client.getLastName()}: ${client.getEmail()}" }
     }
 

@@ -25,7 +25,7 @@ Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFk
 ###LIST ALL
 GET http://localhost:8080/clients?start=0&count=10
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0M0BtcHAuY29tIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTY4NTc4OTc5MiwiZXhwIjoxNjg1NzkzMzkyfQ.DqiwuVLEBSSc2cdsrIOOTwzX-eA5j_8NprztUP5JDFpFL25U5p3DE26mKbUcqrLUBKYB6gv-_aTddI-5IATX3A
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MUBtcHAuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg1NzkyMDE0LCJleHAiOjE2ODU3OTU2MTR9.8uYkT0jhwfTJGr2fbYaQGbuiC-VQmUl1RLbQmMh81d-UY0BBvneRtcmQomCU6DbMy_lOaWu_0HnZMt6xM4I3CA
 
 ###DELETE
 DELETE http://localhost:8080/clients/2

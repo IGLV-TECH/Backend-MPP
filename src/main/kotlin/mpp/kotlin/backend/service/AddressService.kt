@@ -12,13 +12,14 @@ class AddressService(
 ) {
     private val logger = KotlinLogging.logger {}
 
-    fun findAll(): MutableIterable<Address> {
-        logger.info { "Finding all addresses" }
-        return addressRepository.findAll()
+    fun findAll(): List<Address> {
+        logger.info { "Retrieving all addresses" }
+        val addresses = addressRepository.findAll()
+        return addresses.sortedBy { it.getId() }
     }
 
     fun findById(id: Int): Address {
-        logger.info { "Finding address by ID: $id" }
+        logger.info { "Retrieving address by ID: $id" }
         val optional: Optional<Address> = addressRepository.findById(id)
         if (optional.isPresent) {
             return optional.get()
@@ -29,7 +30,7 @@ class AddressService(
     }
 
     fun findOne(address: Address): Int {
-        logger.info { "Finding one address" }
+        logger.info { "Retrieving one address" }
         for (a in addressRepository.findAll()) {
             if (a.myEquals(address)) {
                 logger.info { "Address found with ID: ${a.getId()}" }

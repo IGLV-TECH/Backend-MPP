@@ -14,11 +14,6 @@ class ItemsService(
 ) {
     private val logger = KotlinLogging.logger {}
 
-    fun findAll(): MutableIterable<Item> {
-        logger.info { "Retrieving all items" }
-        return itemRepository.findAll()
-    }
-
     fun findAllByCategory(categoryType: CategoryType): ArrayList<Map<String, String>> {
         logger.info { "Retrieving items by category: $categoryType" }
         var list = ArrayList<Map<String, String>>()

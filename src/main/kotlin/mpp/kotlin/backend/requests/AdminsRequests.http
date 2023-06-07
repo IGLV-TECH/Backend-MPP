@@ -1,5 +1,5 @@
 ###LOGIN
-GET http://localhost:8080/admins/login
+POST http://localhost:8080/admins/login
 Content-Type: application/json
 
 {

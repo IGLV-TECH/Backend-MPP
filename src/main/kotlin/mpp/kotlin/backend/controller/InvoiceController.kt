@@ -41,7 +41,7 @@ class InvoiceController {
     ): List<Invoice> {
         logger.info { "Listing all invoices" }
         if (tokenProvider.validateToken(token) && (tokenProvider.getRoleFromToken(token) == "client" || tokenProvider.getRoleFromToken(token) == "admin")) {
-            val all = invoiceService.findAll().toList()
+            val all = invoiceService.findAll()
             val endIndex = (start + count).coerceAtMost(all.size)
             return all.subList(start, endIndex)
         } else {

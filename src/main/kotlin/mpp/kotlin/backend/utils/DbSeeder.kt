@@ -4,6 +4,10 @@ import domain.*
 import mpp.kotlin.backend.repository.*
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
+import java.security.MessageDigest
+import java.time.LocalDate
+import java.util.*
+import javax.xml.bind.DatatypeConverter
 
 @Component
 class DbSeeder(
@@ -14,6 +18,13 @@ class DbSeeder(
     val invoiceRepository: InvoiceRepository,
     val itemRepository: ItemRepository
 ) : CommandLineRunner {
+
+    private fun encryptPassword(password: String): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val hashBytes = md.digest(password.toByteArray())
+        return DatatypeConverter.printHexBinary(hashBytes).lowercase(Locale.getDefault())
+    }
+
     override fun run(vararg args: String?) {
 
         this.employeeRepository.deleteAll()
@@ -21,122 +32,35 @@ class DbSeeder(
         this.adminRepository.deleteAll()
         this.addressRepository.deleteAll()
         this.itemRepository.deleteAll()
+        this.invoiceRepository.deleteAll()
 
+        for (i in 1..10) {
+            val address = Address("Test$i", "Test$i", "Test$i", i, "1234")
+            this.addressRepository.save(address)
 
-        val address1 = Address("Test", "Test", "Test", 1, "1234")
-        val address2 = Address("Test", "Test", "Test", 2, "1234")
-        val address3 = Address("Test", "Test", "Test", 3, "1234")
-        val address4 = Address("Test", "Test", "Test", 4, "1234")
-        val address5 = Address("Test", "Test", "Test", 5, "1234")
-        val address6 = Address("Test", "Test", "Test", 6, "1234")
-        val address7 = Address("Test", "Test", "Test", 7, "1234")
-        val address8 = Address("Test", "Test", "Test", 8, "1234")
-        val address9 = Address("Test", "Test", "Test", 9, "1234")
-        val address10 = Address("Test", "Test", "Test", 10, "1234")
-        val address11 = Address("Test", "Test", "Test", 11, "1234")
-        val address12 = Address("Test", "Test", "Test", 12, "1234")
-        val address13 = Address("Test", "Test", "Test", 13, "1234")
-        val address14 = Address("Test", "Test", "Test", 14, "1234")
-        val address15 = Address("Test", "Test", "Test", 15, "1234")
-        val addresses = mutableListOf<Address>()
-        addresses.add(address1)
-        addresses.add(address2)
-        addresses.add(address3)
-        addresses.add(address4)
-        addresses.add(address5)
-        addresses.add(address6)
-        addresses.add(address7)
-        addresses.add(address8)
-        addresses.add(address9)
-        addresses.add(address10)
-        addresses.add(address11)
-        addresses.add(address12)
-        addresses.add(address13)
-        addresses.add(address14)
-        addresses.add(address15)
-        this.addressRepository.saveAll(addresses)
+            val admin = Admin("Test$i", "Test$i", "07noidoi", "test$i@mpp.com", encryptPassword("admin$i"), address)
+            this.adminRepository.save(admin)
 
-        val admin1 = Admin("Test", "Test", "07noidoi", "test1@mpp.com", "admin1", address1)
-        val admin2 = Admin("Test", "Test", "07noidoi", "test2@mpp.com", "admin2", address2)
-        val admin3 = Admin("Test", "Test", "07noidoi", "test3@mpp.com", "admin3", address3)
-        val admin4 = Admin("Test", "Test", "07noidoi", "test4@mpp.com", "admin4", address4)
-        val admin5 = Admin("Test", "Test", "07noidoi", "test5@mpp.com", "admin5", address5)
-        val admins = mutableListOf<Admin>()
-        admins.add(admin1)
-        admins.add(admin2)
-        admins.add(admin3)
-        admins.add(admin4)
-        admins.add(admin5)
-        this.adminRepository.saveAll(admins)
+            val client = Client(
+                "Test$i", "Test$i", "07noidoi", "test$i@mpp.com", encryptPassword("client$i"), i.toFloat(), address
+            )
+            this.clientRepository.save(client)
 
-        val client1 = Client("Test", "Test", "07noidoi", "test1@mpp.com", "client1", 0F, address6)
-        val client2 = Client("Test", "Test", "07noidoi", "test2@mpp.com", "client2", 0F, address7)
-        val client3 = Client("Test", "Test", "07noidoi", "test3@mpp.com", "client3", 0F, address8)
-        val client4 = Client("Test", "Test", "07noidoi", "test4@mpp.com", "client4", 0F, address9)
-        val client5 = Client("Test", "Test", "07noidoi", "test5@mpp.com", "client5", 0F, address10)
-        val clients = mutableListOf<Client>()
-        clients.add(client1)
-        clients.add(client2)
-        clients.add(client3)
-        clients.add(client4)
-        clients.add(client5)
-        this.clientRepository.saveAll(clients)
+            val employee =
+                Employee("Test$i", "Test$i", "07noidoi", "test$i@mpp.com", encryptPassword("employee$i"), address)
+            this.employeeRepository.save(employee)
 
-        val employee1 = Employee("Test", "Test", "07noidoi", "test1@mpp.com", "employee1", address11)
-        val employee2 = Employee("Test", "Test", "07noidoi", "test2@mpp.com", "employee2", address12)
-        val employee3 = Employee("Test", "Test", "07noidoi", "test3@mpp.com", "employee3", address13)
-        val employee4 = Employee("Test", "Test", "07noidoi", "test4@mpp.com", "employee4", address14)
-        val employee5 = Employee("Test", "Test", "07noidoi", "test5@mpp.com", "employee5", address15)
-        val employees = mutableListOf<Employee>()
-        employees.add(employee1)
-        employees.add(employee2)
-        employees.add(employee3)
-        employees.add(employee4)
-        employees.add(employee5)
-        this.employeeRepository.saveAll(employees)
+            val item = Item("Item$i", i.toFloat(), CategoryType.PAPER_AND_CARDBOARD)
+            this.itemRepository.save(item)
 
-        val item11 = Item("PAPER_AND_CARDBOARD1",2F, CategoryType.valueOf("PAPER_AND_CARDBOARD"))
-        val item12 = Item("PAPER_AND_CARDBOARD2",2F, CategoryType.valueOf("PAPER_AND_CARDBOARD"))
-        val item13 = Item("PAPER_AND_CARDBOARD3",2F, CategoryType.valueOf("PAPER_AND_CARDBOARD"))
-        val item14 = Item("PAPER_AND_CARDBOARD4",2F, CategoryType.valueOf("PAPER_AND_CARDBOARD"))
-        val item15 = Item("PAPER_AND_CARDBOARD5",2F, CategoryType.valueOf("PAPER_AND_CARDBOARD"))
-        val item21 = Item("PLASTIC_AND_BOTTLE1",2F, CategoryType.valueOf("PLASTIC_AND_BOTTLE"))
-        val item22 = Item("PLASTIC_AND_BOTTLE2",2F, CategoryType.valueOf("PLASTIC_AND_BOTTLE"))
-        val item23 = Item("PLASTIC_AND_BOTTLE3",2F, CategoryType.valueOf("PLASTIC_AND_BOTTLE"))
-        val item24 = Item("PLASTIC_AND_BOTTLE4",2F, CategoryType.valueOf("PLASTIC_AND_BOTTLE"))
-        val item25 = Item("PLASTIC_AND_BOTTLE5",2F, CategoryType.valueOf("PLASTIC_AND_BOTTLE"))
-        val item31 = Item("METAL_AND_ALUMINIUM1",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item32 = Item("METAL_AND_ALUMINIUM2",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item33 = Item("METAL_AND_ALUMINIUM3",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item34 = Item("METAL_AND_ALUMINIUM4",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item35 = Item("METAL_AND_ALUMINIUM5",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item41 = Item("ELECTRIC_AND_ELECTRONICS1",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item42 = Item("ELECTRIC_AND_ELECTRONICS2",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item43 = Item("ELECTRIC_AND_ELECTRONICS3",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item44 = Item("ELECTRIC_AND_ELECTRONICS4",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val item45 = Item("ELECTRIC_AND_ELECTRONICS5",2F, CategoryType.valueOf("METAL_AND_ALUMINIUM"))
-        val items = mutableListOf<Item>()
-        items.add(item11)
-        items.add(item12)
-        items.add(item13)
-        items.add(item14)
-        items.add(item15)
-        items.add(item21)
-        items.add(item22)
-        items.add(item23)
-        items.add(item24)
-        items.add(item25)
-        items.add(item31)
-        items.add(item32)
-        items.add(item33)
-        items.add(item34)
-        items.add(item35)
-        items.add(item41)
-        items.add(item42)
-        items.add(item43)
-        items.add(item44)
-        items.add(item45)
-        this.itemRepository.saveAll(items)
+            val invoice = Invoice(
+                CategoryType.PAPER_AND_CARDBOARD, (i * 10).toFloat(), i.toFloat(), LocalDate.now(), client, employee
+            )
+            val savedInvoice = this.invoiceRepository.save(invoice)
+            savedInvoice.items.add(Content(ContentId(savedInvoice.getId(), item.getId()), savedInvoice, item, i))
+            this.invoiceRepository.save(savedInvoice)
+        }
+
         println(" -- Database has been initialized")
     }
 }

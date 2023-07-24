@@ -14,9 +14,10 @@ class InvoiceService(
 ) {
     private val logger = KotlinLogging.logger {}
 
-    fun findAll(): MutableIterable<Invoice> {
+    fun findAll(): List<Invoice> {
         logger.info { "Retrieving all invoices" }
-        return invoiceRepository.findAll()
+        val invoices = invoiceRepository.findAll()
+        return invoices.sortedBy { it.getId() }
     }
 
     fun addInvoice(

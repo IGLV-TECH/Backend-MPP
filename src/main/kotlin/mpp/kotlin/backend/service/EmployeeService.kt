@@ -25,9 +25,10 @@ class EmployeeService(
         return employee
     }
 
-    fun findAll(): MutableIterable<Employee> {
+    fun findAll(): List<Employee> {
         logger.info { "Retrieving all employees" }
-        return employeeRepository.findAll()
+        val employees = employeeRepository.findAll()
+        return employees.sortedBy { it.getId() }
     }
 
     fun findById(id: Int): Employee {

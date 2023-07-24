@@ -10,6 +10,9 @@ import mpp.kotlin.backend.service.ClientService
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.security.MessageDigest
+import java.util.*
+import javax.xml.bind.DatatypeConverter
 
 @RestController
 @CrossOrigin(origins = ["*"])
@@ -26,9 +29,15 @@ class ClientController {
 
     private val logger = KotlinLogging.logger {}
 
-    @GetMapping("/login")
+    private fun encryptPassword(password: String): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val hashBytes = md.digest(password.toByteArray())
+        return DatatypeConverter.printHexBinary(hashBytes).lowercase(Locale.getDefault())
+    }
+
+    @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): Map<String, Any> {
-        val client = clientService.login(loginRequest.email, loginRequest.password)
+        val client = clientService.login(loginRequest.email, encryptPassword(loginRequest.password))
         if (client != null) {
             val token = tokenProvider.generateToken(loginRequest.email, "client")
             return mapOf("token" to token, "client" to client)
@@ -40,7 +49,13 @@ class ClientController {
 
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String) {
-        logger.info { "Logging out ${tokenProvider.getRoleFromToken(token)} with email: ${tokenProvider.getEmailFromToken(token)}" }
+        logger.info {
+            "Logging out ${tokenProvider.getRoleFromToken(token)} with email: ${
+                tokenProvider.getEmailFromToken(
+                    token
+                )
+            }"
+        }
         tokenProvider.invalidateToken(token)
     }
 
@@ -52,7 +67,7 @@ class ClientController {
     ): List<Client> {
         logger.info { "Listing all clients" }
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
-            val all = clientService.findAll().toList()
+            val all = clientService.findAll()
             val endIndex = (start + count).coerceAtMost(all.size)
             return all.subList(start, endIndex)
         } else {
@@ -88,7 +103,7 @@ class ClientController {
                 request.firstName,
                 request.phoneNumber,
                 request.email,
-                request.password,
+                encryptPassword(request.password),
                 request.balance,
                 addressService.findById(id)
             )
@@ -111,16 +126,17 @@ class ClientController {
     ) {
         logger.info { "Updating client with ID: $id" }
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
-            val address = request.address
-            val idAddress = addressService.findOne(address)
+            val old = clientService.findById(id)
+            var password = old.getPassword()
+            if (request.password != "") password = encryptPassword(request.password)
             val client = Client(
                 request.lastName,
                 request.firstName,
                 request.phoneNumber,
                 request.email,
-                request.password,
+                password,
                 request.balance,
-                addressService.findById(idAddress)
+                request.address
             )
             client.setId(id)
             try {

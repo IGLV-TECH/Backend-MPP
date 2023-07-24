@@ -25,10 +25,12 @@ class ClientService(
         return client
     }
 
-    fun findAll(): MutableIterable<Client> {
+    fun findAll(): List<Client> {
         logger.info { "Retrieving all clients" }
-        return clientRepository.findAll()
+        val clients = clientRepository.findAll()
+        return clients.sortedBy { it.getId() }
     }
+
 
     fun findById(id: Int): Client {
         logger.info { "Retrieving client by ID: $id" }

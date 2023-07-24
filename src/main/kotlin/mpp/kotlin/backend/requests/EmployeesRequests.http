@@ -1,5 +1,5 @@
 ###LOGIN
-GET http://localhost:8080/employees/login
+POST http://localhost:8080/employees/login
 Content-Type: application/json
 
 {

@@ -10,6 +10,9 @@ import mpp.kotlin.backend.service.EmployeeService
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.security.MessageDigest
+import java.util.*
+import javax.xml.bind.DatatypeConverter
 
 @RestController
 @CrossOrigin(origins = ["*"])
@@ -26,9 +29,15 @@ class EmployeeController {
 
     private val logger = KotlinLogging.logger {}
 
-    @GetMapping("/login")
+    private fun encryptPassword(password: String): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val hashBytes = md.digest(password.toByteArray())
+        return DatatypeConverter.printHexBinary(hashBytes).lowercase(Locale.getDefault())
+    }
+
+    @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): Map<String, Any> {
-        val employee = employeeService.login(loginRequest.email, loginRequest.password)
+        val employee = employeeService.login(loginRequest.email, encryptPassword(loginRequest.password))
         return if (employee != null) {
             val token = tokenProvider.generateToken(loginRequest.email, "employee")
             mapOf("token" to token, "employee" to employee)
@@ -40,7 +49,13 @@ class EmployeeController {
 
     @PostMapping("/logout")
     fun logout(@RequestHeader("Authorization") token: String) {
-        logger.info { "Logging out ${tokenProvider.getRoleFromToken(token)} with email: ${tokenProvider.getEmailFromToken(token)}" }
+        logger.info {
+            "Logging out ${tokenProvider.getRoleFromToken(token)} with email: ${
+                tokenProvider.getEmailFromToken(
+                    token
+                )
+            }"
+        }
         tokenProvider.invalidateToken(token)
     }
 
@@ -52,7 +67,7 @@ class EmployeeController {
     ): List<Employee> {
         logger.info { "Listing all employees" }
         if (tokenProvider.validateToken(token)) {
-            val all = employeeService.findAll().toList()
+            val all = employeeService.findAll()
             val endIndex = (start + count).coerceAtMost(all.size)
             return all.subList(start, endIndex)
         } else {
@@ -88,7 +103,7 @@ class EmployeeController {
                 request.firstName,
                 request.phoneNumber,
                 request.email,
-                request.password,
+                encryptPassword(request.password),
                 addressService.findById(id)
             )
             try {
@@ -110,15 +125,11 @@ class EmployeeController {
     ) {
         logger.info { "Updating employee with ID: $id" }
         if (tokenProvider.validateToken(token) && tokenProvider.getRoleFromToken(token) == "admin") {
-            val address = request.address
-            val idAddress = addressService.findOne(address)
+            val old = employeeService.findById(id)
+            var password = old.getPassword()
+            if (request.password != "") password = encryptPassword(request.password)
             var employee = Employee(
-                request.lastName,
-                request.firstName,
-                request.phoneNumber,
-                request.email,
-                request.password,
-                addressService.findById(idAddress)
+                request.lastName, request.firstName, request.phoneNumber, request.email, password, request.address
             )
             employee.setId(id)
             try {

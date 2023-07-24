@@ -6,6 +6,9 @@ import mpp.kotlin.backend.service.AdminService
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import java.security.MessageDigest
+import java.util.*
+import javax.xml.bind.DatatypeConverter
 
 @RestController
 @CrossOrigin(origins = ["*"])
@@ -19,9 +22,15 @@ class AdminController {
 
     private val logger = KotlinLogging.logger {}
 
-    @GetMapping("/login")
+    private fun encryptPassword(password: String): String {
+        val md = MessageDigest.getInstance("SHA-256")
+        val hashBytes = md.digest(password.toByteArray())
+        return DatatypeConverter.printHexBinary(hashBytes).lowercase(Locale.getDefault())
+    }
+
+    @PostMapping("/login")
     fun login(@RequestBody loginRequest: LoginRequest): Map<String, Any> {
-        val admin = adminService.login(loginRequest.email, loginRequest.password)
+        val admin = adminService.login(loginRequest.email, encryptPassword(loginRequest.password))
         if (admin != null) {
             val token = tokenProvider.generateToken(loginRequest.email, "admin")
             return mapOf("token" to token, "admin" to admin)
